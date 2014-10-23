@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Soul Reapers</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="background_splash">background/splash.png</string>
+    <string name="background_menu">background/main_menu_2.png</string>
+    <string name="button_play">button/button_play.png</string>
+    <string name="button_options">button/button_options.png</string>
+    <string name="roses_kingdom">font/roses_kingdom.ttf</string>
+    <string name="loading_msg">Chargement...</string>
+    <string name="mus_lullaby_of_reaper">mfx/Lullaby_of_Reaper.ogg</string>
+    <string name="player_dante">object/dante.png</string>
+    <string name="mus_steady_step">mfx/Steady_Step.ogg</string>
+
+</resources>
