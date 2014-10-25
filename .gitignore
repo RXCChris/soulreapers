@@ -28,3 +28,6 @@ proguard/
 # Backup files
 *~
 
+# Eclipse settings
+.settings
+
