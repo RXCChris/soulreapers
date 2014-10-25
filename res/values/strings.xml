@@ -4,14 +4,34 @@
     <string name="app_name">Soul Reapers</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="background_splash">background/splash.png</string>
-    <string name="background_menu">background/main_menu_2.png</string>
-    <string name="button_play">button/button_play.png</string>
-    <string name="button_options">button/button_options.png</string>
-    <string name="roses_kingdom">font/roses_kingdom.ttf</string>
-    <string name="loading_msg">Chargement...</string>
-    <string name="mus_lullaby_of_reaper">mfx/Lullaby_of_Reaper.ogg</string>
-    <string name="player_dante">object/dante.png</string>
-    <string name="mus_steady_step">mfx/Steady_Step.ogg</string>
+    <string name="bg_01">background/bg_splash.png</string>
+    <string name="bg_02">background/bg_menu_2.png</string>
+    <string name="bt_01">button/bt_play.png</string>
+    <string name="bt_02">button/bt_options.png</string>
+    <string name="ft_01">font/ft_roses_kingdom.ttf</string>
+    <string name="mg_01">Chargement...</string>
+    <string name="ms_01">mfx/ms_lullaby_of_reaper.ogg</string>
+    <string name="ms_02">mfx/ms_steady_step.ogg</string><string name="pc_01">object/pc_dante.png</string>
+    
+    <string name="tb_01">Commencer</string>
+    <string name="tb_02">Options</string>
+    <string name="tb_03">Extras</string>
+    <string name="tb_04">Quitter</string>
+    <string name="ft_02">font/ft_this_night.ttf</string>
+    <string name="ft_03">font/ft_dc_s.ttf</string>
+    <string name="ft_04">font/ft_dc_o.ttf</string>
+    <string name="bg_03">background/bg_menu_3.png</string>
+    <string name="bg_04">background/bg_menu_back.png</string>
+    <string name="tb_05">Inventaire</string>
+    <string name="tb_06">Equipement</string>
+    <string name="tb_07">Status</string>
+    <string name="tb_08">Sauvegarde</string>
+    <string name="tb_09">Retour</string>
+    <string name="tb_10">Map</string>
+    <string name="tb_11">Journal</string>
+    <string name="mg_02">Ceci est une demo,\nvous ne pouvez malheureusement pas\nutiliser cette fonction.</string>
+    <string name="bg_05">background/bg_cathedral.png</string>
+    <string name="bg_06">background/grid.png</string>
+    <string name="ic_01">object/ic_dante.png</string>
 
 </resources>
