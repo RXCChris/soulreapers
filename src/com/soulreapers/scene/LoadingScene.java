@@ -10,35 +10,37 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.util.color.Color;
 
 import com.soulreapers.R;
+import com.soulreapers.core.ResourceManager;
 
 public class LoadingScene extends BaseScene {
 
-	private Font mFont;
-	private final int FONT_SIZE = 48;
+//	private Font mFont;
+//	private final int FONT_SIZE = 48;
 
 	@Override
-	public void loadResources() {
-		FontFactory.setAssetBasePath("gfx/");
-		final ITexture fontTexture = new BitmapTextureAtlas(mActivity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	public void onLoadResources() {
+//		FontFactory.setAssetBasePath("gfx/");
+//		final ITexture fontTexture = new BitmapTextureAtlas(mActivity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		//mFont = FontFactory.createStrokeFromAsset(mActivity.getFontManager(), fontTexture, mActivity.getAssets(), mActivity.getString(R.string.roses_kingdom), FONT_SIZE, true, Color.WHITE, 2f, Color.BLACK);
-		mFont = FontFactory.createStrokeFromAsset(mActivity.getFontManager(), fontTexture, mActivity.getAssets(), mActivity.getString(R.string.roses_kingdom), FONT_SIZE, true, Color.WHITE_ARGB_PACKED_INT, 2.0f, Color.BLACK_ARGB_PACKED_INT);
-		mFont.load();
+//		mFont = FontFactory.createStrokeFromAsset(mActivity.getFontManager(), fontTexture, mActivity.getAssets(), mActivity.getString(R.string.ft_02), FONT_SIZE, true, Color.WHITE_ARGB_PACKED_INT, 2.0f, Color.BLACK_ARGB_PACKED_INT);
+//		mFont.load();
 	}
 
 	@Override
-	public void create() {
-		setBackground(new Background(Color.WHITE));
-		attachChild(new Text(400, 240, mFont, mActivity.getString(R.string.loading_msg), mVbom));
+	public void onCreate() {
+//		setBackground(new Background(Color.WHITE));
+//		attachChild(new Text(400, 240, mFont, mActivity.getString(R.string.mg_01), mVbom));
+		attachChild(new Text(400, 240, ResourceManager.getInstance().getFont(R.string.ft_03), ResourceManager.getInstance().getResourceString(R.string.mg_01), ResourceManager.getInstance().getVertexBufferObjectManager()));
 	}
 
 	@Override
-	public void unloadResources() {
+	public void onDestroyResources() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void destroy() {
+	public void onDestroy() {
 		// TODO Auto-generated method stub
 
 	}

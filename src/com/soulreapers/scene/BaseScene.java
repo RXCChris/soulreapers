@@ -11,25 +11,25 @@ import com.soulreapers.GameActivity;
 
 public abstract class BaseScene extends Scene {
 
-	protected ResourceManager mResourceManager = ResourceManager.getInstance();
-	protected SceneManager mSceneManager = SceneManager.getInstance();
+//	protected ResourceManager mResourceManager = ResourceManager.getInstance();
+//	protected SceneManager mSceneManager = SceneManager.getInstance();
 
-	protected Engine mEngine;
-	protected GameActivity mActivity;
-	protected VertexBufferObjectManager mVbom;
-	protected Camera mCamera;
+//	protected Engine mEngine;
+//	protected GameActivity mActivity;
+//	protected VertexBufferObjectManager mVbom;
+//	protected Camera mCamera;
+//
+//	public void initialize(GameActivity activity, ResourceManager resourceManager) {
+//		mActivity = activity;
+//		mVbom = activity.getVertexBufferObjectManager();
+//		mEngine = activity.getEngine();
+//		mCamera = mEngine.getCamera();
+//	}
 
-	public void initialize(GameActivity activity, ResourceManager resourceManager) {
-		mActivity = activity;
-		mVbom = activity.getVertexBufferObjectManager();
-		mEngine = activity.getEngine();
-		mCamera = mEngine.getCamera();
-	}
-
-	public abstract void loadResources();
-	public abstract void create();
-	public abstract void unloadResources();
-	public abstract void destroy();
+	public abstract void onLoadResources();
+	public abstract void onCreate();
+	public abstract void onDestroyResources();
+	public abstract void onDestroy();
 	public abstract void onPause();
 	public abstract void onResume();
 

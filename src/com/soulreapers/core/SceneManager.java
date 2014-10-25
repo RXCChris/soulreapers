@@ -1,18 +1,25 @@
 package com.soulreapers.core;
 
+import org.andengine.engine.camera.Camera;
 import org.andengine.engine.Engine;
+import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 import org.andengine.util.debug.Debug;
 
 import com.soulreapers.GameActivity;
+import com.soulreapers.misc.GameConstants;
 import com.soulreapers.scene.*;
 
 import android.os.AsyncTask;
 
+/**
+ * 
+ * @author chris
+ *
+ */
 public class SceneManager {
 
 	private static final SceneManager INSTANCE = new SceneManager();
 
-	private ResourceManager mResourceManager = ResourceManager.getInstance();
 	private Engine mEngine;
 	private GameActivity mActivity;
 
@@ -23,13 +30,17 @@ public class SceneManager {
 		// nothing to do
 	}
 
+	public Camera getCamera() {
+		return mActivity.getEngine().getCamera();
+	}
+
 	public static SceneManager getInstance() {
 		return INSTANCE;
 	}
 
-	public void init(GameActivity activity) {
-		mActivity = activity;
-		mEngine = activity.getEngine();
+	public void initialize(GameActivity activity) {
+		getInstance().mActivity = activity;
+		getInstance().mEngine = activity.getEngine();
 	}
 
 	public BaseScene getCurrentScene() {
@@ -41,14 +52,15 @@ public class SceneManager {
 		Debug.i("Set a new scene " + scene.toString());
 	}
 
-	public void showSplash() {
+	public void showSplash(OnCreateSceneCallback pOnCreateSceneCallback) {
 		Debug.i("Scene: Splash");
 		final SplashScene splash = new SplashScene();
 		setCurrentScene(splash);
-		splash.initialize(mActivity, mResourceManager);
-		splash.loadResources();
-		splash.create();
+//		splash.initialize(mActivity, mResourceManager);
+		splash.onLoadResources();
+		splash.onCreate();
 		mEngine.setScene(splash);
+
 
 		new AsyncTask<Void, Void, Void>() {
 			@Override
@@ -56,29 +68,30 @@ public class SceneManager {
 				long timestamp = System.currentTimeMillis();
 				// TODO load common resources
 				MainMenuScene menu = new MainMenuScene();
-				menu.initialize(mActivity, mResourceManager);
-				menu.loadResources();
-				menu.create();
+//				menu.initialize(mActivity, mResourceManager);
+				menu.onLoadResources();
+				menu.onCreate();
 				mLoadingScene = new LoadingScene();
-				mLoadingScene.initialize(mActivity, mResourceManager);
-				mLoadingScene.loadResources();
-				mLoadingScene.create();
+//				mLoadingScene.initialize(mActivity, mResourceManager);
+				mLoadingScene.onLoadResources();
+				mLoadingScene.onCreate();
 
 				long elapsed = System.currentTimeMillis() - timestamp;
-				if (elapsed < GameActivity.SPLASH_DURATION) {
+				if (elapsed < GameConstants.SPLASH_DURATION) {
 					try {
-						Thread.sleep(GameActivity.SPLASH_DURATION - elapsed);
+						Thread.sleep(GameConstants.SPLASH_DURATION - elapsed);
 					} catch (InterruptedException e) {
 						Debug.w("This should not happen");
 					}
 				}
 				setCurrentScene(menu);
 				mEngine.setScene(menu);
-				splash.destroy();
-				splash.unloadResources();
+				splash.onDestroy();
+				splash.onDestroyResources();
 				return null;
 			}
 		}.execute();
+		pOnCreateSceneCallback.onCreateSceneFinished(splash);
 	}
 
 	public void showScene(Class<? extends BaseScene> sceneClass) {
@@ -96,12 +109,12 @@ public class SceneManager {
 				@Override
 				protected Void doInBackground(Void... params) {
 					if (oldScene != null) {
-						oldScene.destroy();
-						oldScene.unloadResources();
+						oldScene.onDestroyResources();
+						oldScene.onDestroy();
 					}
-					scene.initialize(mActivity, mResourceManager);
-					scene.loadResources();
-					scene.create();
+//					scene.initialize(mActivity, mResourceManager);
+					scene.onLoadResources();
+					scene.onCreate();
 					setCurrentScene(scene);
 					mEngine.setScene(scene);
 					return null;
