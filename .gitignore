@@ -31,3 +31,8 @@ proguard/
 # Eclipse settings
 .settings
 
+#Documentations
+doc/
+javadoc.xml
+
+
