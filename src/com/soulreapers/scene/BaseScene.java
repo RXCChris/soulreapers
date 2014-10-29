@@ -1,39 +1,52 @@
 package com.soulreapers.scene;
 
-import org.andengine.engine.Engine;
-import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
-import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.debug.Debug;
 
-import com.soulreapers.core.*;
-import com.soulreapers.GameActivity;
-
+/**
+ * This class is a basic representation of each scene in the game.
+ * <p>
+ * Notice that it is an abstract class, and every methods must be
+ * overridden by any inherited class.
+ * </p>
+ *
+ * @since 2014.10.29
+ * @version 0.1 (alpha)
+ * @author dxcloud
+ */
 public abstract class BaseScene extends Scene {
-
-//	protected ResourceManager mResourceManager = ResourceManager.getInstance();
-//	protected SceneManager mSceneManager = SceneManager.getInstance();
-
-//	protected Engine mEngine;
-//	protected GameActivity mActivity;
-//	protected VertexBufferObjectManager mVbom;
-//	protected Camera mCamera;
-//
-//	public void initialize(GameActivity activity, ResourceManager resourceManager) {
-//		mActivity = activity;
-//		mVbom = activity.getVertexBufferObjectManager();
-//		mEngine = activity.getEngine();
-//		mCamera = mEngine.getCamera();
-//	}
-
+	/**
+	 * Called when the scene is instanciated.
+	 * Use this method to load any asset used for the scene.
+	 */
 	public abstract void onLoadResources();
-	public abstract void onCreate();
-	public abstract void onDestroyResources();
-	public abstract void onDestroy();
-	public abstract void onPause();
-	public abstract void onResume();
 
-	public void onBackKeyPressed() {
-		Debug.d("Back key Pressed");
-	}
+	/**
+	 * Called after {@link #onLoadResources()}.
+	 * <P>
+	 * This method is used for initializing the scene, such as
+	 * positionning sprites, texts, and others entities...
+	 * </P>
+	 */
+	public abstract void onCreate();
+
+	/**
+	 * Called when the scene needs unload resources previously loaded
+	 * with {@link #onLoadResources()}.
+	 */
+	public abstract void onDestroyResources();
+
+	/**
+	 * Called when the scene is about to destroy.
+	 */
+	public abstract void onDestroy();
+
+	/**
+	 * Called when the activity is going into pause state.
+	 */
+	public abstract void onPause();
+
+	/**
+	 * Called to resume the game after being paused.
+	 */
+	public abstract void onResume();
 }
