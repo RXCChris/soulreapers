@@ -1,25 +1,42 @@
 package com.soulreapers.scene;
 
+import java.util.HashMap;
+
 import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.MoveYModifier;
+import org.andengine.entity.scene.IOnSceneTouchListener;
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.util.HorizontalAlign;
-import org.andengine.util.debug.Debug;
 
 import com.soulreapers.R;
 import com.soulreapers.core.AudioManager;
 import com.soulreapers.core.ResourceManager;
 import com.soulreapers.core.SceneManager;
+import com.soulreapers.misc.GameConstants;
 
-public class MainMenuScene extends BaseScene {
+/**
+ * This class represents main title menu.
+ * <p>
+ * This menu contains a horizontally scrolling background, and also 2 buttons.
+ * </p>
+ * <p>
+ * An Ester egg has been added to this menu. Try to find out. ^^
+ * </p>
+ *
+ * @since 2014.10.29
+ * @version 0.1 (alpha)
+ * @author dxcloud
+ */
+public class MainMenuScene extends BaseScene implements IOnSceneTouchListener {
 
+	// Textures and Sprites for background use
 	private ITextureRegion mForegroundTextureRegion;
 	private BitmapTextureAtlas mForegroundTextureAtlas;
 	private Sprite mForegroundSprite;
@@ -28,116 +45,115 @@ public class MainMenuScene extends BaseScene {
 	private BitmapTextureAtlas mBackgroundTextureAtlas;
 	private Sprite mBackgroundSprite;
 
-	private Text mTextPlay;
-	private Text mTextOptions;
-	private Text mTextExtras;
-	private Text mTextQuit;
+	private static final int FONT_ID = R.string.ft_command;
 
+	private enum GameOptions {
+		PLAY {
+			@Override
+			public String toString() {
+				return ">> Commencer";
+			}
+		},
+		OPTIONS {
+			@Override
+			public String toString() {
+				return ">> Options";
+			}
+		},
+		EXTRAS {
+			@Override
+			public String toString() {
+				return ">> Extras";
+			}
+		}
+	}
+
+	/**
+	 * Map containing text buttons.
+	 */
+	private HashMap<GameOptions, Text> mGameOptionsTextMap = new HashMap<GameOptions, Text>();
+
+	/**
+	 * @see com.soulreapers.scene.BaseScene#onLoadResources()
+	 */
 	@Override
 	public void onLoadResources() {
-//		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		mForegroundTextureAtlas = new BitmapTextureAtlas(ResourceManager.getInstance().getTextureManager(),
+		mForegroundTextureAtlas = new BitmapTextureAtlas(
+				ResourceManager.getInstance().getTextureManager(),
 				800, 480, TextureOptions.BILINEAR);
 		mForegroundTextureRegion = ResourceManager.getInstance()
 				.getTextureRegion(mForegroundTextureAtlas, R.string.bg_03);
-//		mForegroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mForegroundTextureAtlas, mActivity, mActivity.getString(R.string.bg_03), 0, 0);
 		mForegroundTextureAtlas.load();
 
-		mBackgroundTextureAtlas = new BitmapTextureAtlas(ResourceManager.getInstance().getTextureManager(), 800, 800, TextureOptions.BILINEAR);
-//		mBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBackgroundTextureAtlas, mActivity, mActivity.getString(R.string.bg_04), 0, 0);
+		mBackgroundTextureAtlas = new BitmapTextureAtlas(
+				ResourceManager.getInstance().getTextureManager(),
+				800, 800, TextureOptions.BILINEAR);
 		mBackgroundTextureRegion = ResourceManager.getInstance()
 				.getTextureRegion(mBackgroundTextureAtlas, R.string.bg_04);
 		mBackgroundTextureAtlas.load();
 	}
 
+	private void addGameOption(final GameOptions pOption,
+			final int pPadding,
+			final Class<? extends BaseScene> pBaseScene,
+			boolean pVisible) {
+		Text optionText = new Text(GameConstants.X_OPTION_TEXT_PADDING,
+				GameConstants.Y_OPTION_TEXT_PADDING * pPadding,
+				ResourceManager.getInstance().getFont(FONT_ID),
+				pOption.toString(),
+				new TextOptions(HorizontalAlign.RIGHT),
+				ResourceManager.getInstance().getVertexBufferObjectManager()) {
+			@Override
+			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
+			final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+				if (pSceneTouchEvent.isActionDown()) {
+					SceneManager.getInstance().showScene(pBaseScene);
+				}
+				return true;
+			}
+		};
+
+		mGameOptionsTextMap.put(pOption, optionText);
+
+		this.attachChild(optionText);
+		if (pVisible) {
+			this.registerTouchArea(optionText);
+		} else {
+			optionText.setVisible(false);
+		}
+	}
+
+	/**
+	 * @see com.soulreapers.scene.BaseScene#onCreate()
+	 */
 	@Override
 	public void onCreate() {
-//		mBackgroundSprite = new Sprite(0, 0, mBackgroundTextureRegion, mVbom);
 		mBackgroundSprite = new Sprite(0, 0, mBackgroundTextureRegion,
 				ResourceManager.getInstance().getVertexBufferObjectManager());
-		mBackgroundSprite.registerEntityModifier(new LoopEntityModifier(new MoveYModifier(10, -228, 0)));
-//		mMainMenu2.registerEntityModifier(new LoopEntityModifier(new RotationModifier(6, 0, 360)));
+		mBackgroundSprite.registerEntityModifier(
+				new LoopEntityModifier(new MoveYModifier(10, -228, 0)));
+		attachChild(mBackgroundSprite);
 
-		attachChild(mBackgroundSprite);		
-
-//		mForegroundSprite = new Sprite(0, 0, mForegroundTextureRegion, mVbom);
 		mForegroundSprite = new Sprite(0, 0, mForegroundTextureRegion,
 				ResourceManager.getInstance().getVertexBufferObjectManager());
 		attachChild(mForegroundSprite);
 
-//		mTextPlay = new Text(500, 240, ResourceManager.getInstance().getFont(R.string.ft_03),
-//				mActivity.getString(R.string.tb_01), new TextOptions(HorizontalAlign.RIGHT), mVbom) {
-		mTextPlay = new Text(500, 240, ResourceManager.getInstance().getFont(R.string.ft_03),
-				ResourceManager.getInstance().getResourceString(R.string.tb_01),
-				new TextOptions(HorizontalAlign.RIGHT),
-				ResourceManager.getInstance().getVertexBufferObjectManager()) {
-			@Override
-			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
-					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-				Debug.i("You touched Play");
-				SceneManager.getInstance().showScene(GameScene.class);
-				return true;
-			}
-		};
+		addGameOption(GameOptions.PLAY, 6, SceneNavigator.class, true);
+		addGameOption(GameOptions.OPTIONS, 7, OptionsMenuScene.class, true);
+		addGameOption(GameOptions.EXTRAS, 8, ExtrasMenuScene.class, false);
 
-//		mTextOptions = new Text(500, 300, ResourceManager.getInstance().getFont(R.string.ft_03),
-//				mActivity.getString(R.string.tb_02), new TextOptions(HorizontalAlign.RIGHT), mVbom)	 {
-		mTextOptions = new Text(500, 300, ResourceManager.getInstance().getFont(R.string.ft_03),
-				ResourceManager.getInstance().getResourceString(R.string.tb_02),
-				new TextOptions(HorizontalAlign.RIGHT),
-				ResourceManager.getInstance().getVertexBufferObjectManager()) {
-			@Override
-			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
-					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-				Debug.i("You touched Options");
-				SceneManager.getInstance().showScene(OptionsMenuScene.class);
-				return true;
-			}
-		};
+		mGameOptionsTextMap.get(GameOptions.EXTRAS).setVisible(false);
 
-//		mTextExtras = new Text(500, 360, ResourceManager.getInstance().getFont(R.string.ft_03),
-//				mActivity.getString(R.string.tb_03), new TextOptions(HorizontalAlign.RIGHT), mVbom) {
-		mTextExtras = new Text(500, 360, ResourceManager.getInstance().getFont(R.string.ft_03),
-				ResourceManager.getInstance().getResourceString(R.string.tb_03),
-				new TextOptions(HorizontalAlign.RIGHT),
-				ResourceManager.getInstance().getVertexBufferObjectManager()) {
-			@Override
-			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
-					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-				Debug.i("You touched Extras");
-				SceneManager.getInstance().showScene(BattleScene.class);
-				return true;
-			}
-		};
+		AudioManager.getInstance().playMusic(R.string.ms_01, true, true);
 
-//		mTextQuit = new Text(500, 420, ResourceManager.getInstance().getFont(R.string.ft_03),
-//				mActivity.getString(R.string.tb_04), new TextOptions(HorizontalAlign.RIGHT), mVbom) {
-//		
-		mTextQuit = new Text(500, 420, ResourceManager.getInstance().getFont(R.string.ft_03),
-				ResourceManager.getInstance().getResourceString(R.string.tb_04),
-				new TextOptions(HorizontalAlign.RIGHT),
-				ResourceManager.getInstance().getVertexBufferObjectManager()) {
-			@Override
-			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
-					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-				Debug.i("You touched Quit");
-				return true;
-			}
-		};
-
-		registerTouchArea(mTextPlay);
-		registerTouchArea(mTextOptions);
-		registerTouchArea(mTextExtras);
-		registerTouchArea(mTextQuit);
-
-		attachChild(mTextPlay);
-		attachChild(mTextOptions);
-		attachChild(mTextExtras);
-		attachChild(mTextQuit);
-
-		AudioManager.getInstance().playMusic(R.string.ms_02, true);
+		this.setTouchAreaBindingOnActionDownEnabled(true);
+		this.setOnSceneTouchListener(this);
+		this.setOnSceneTouchListenerBindingOnActionDownEnabled(true);
 	}
 
+	/**
+	 * @see com.soulreapers.scene.BaseScene#onDestroyResources()
+	 */
 	@Override
 	public void onDestroyResources() {
 		mForegroundTextureAtlas.unload();
@@ -146,40 +162,58 @@ public class MainMenuScene extends BaseScene {
 		mBackgroundTextureRegion = null;
 	}
 
+	/**
+	 * @see com.soulreapers.scene.BaseScene#onDestroy()
+	 */
 	@Override
 	public void onDestroy() {
+		AudioManager.getInstance().pauseMusic();
+
 		mForegroundSprite.detachSelf();
 		mForegroundSprite.dispose();
-		mTextPlay.detachSelf();
-		mTextPlay.dispose();
-		mTextOptions.detachSelf();
-		mTextOptions.dispose();
-		mTextExtras.detachSelf();
-		mTextExtras.dispose();
-		mTextQuit.detachSelf();
-		mTextQuit.dispose();
+		mBackgroundSprite.detachSelf();
+		mBackgroundSprite.dispose();
+
+		for (Text optionsText : mGameOptionsTextMap.values()) {
+			this.unregisterTouchArea(optionsText);
+			optionsText.detachSelf();
+			optionsText.dispose();
+		}
 		this.detachSelf();
 		this.dispose();
 	}
 
+	/**
+	 * @see com.soulreapers.scene.BaseScene#onPause()
+	 */
 	@Override
 	public void onPause() {
-		AudioManager.getInstance().pauseMusic();
-	}
-
-	@Override
-	public void onResume() {
-		// TODO Auto-generated method stub
-		AudioManager.getInstance().resumeMusic();
-	}
-
-	@Override
-	public String toString() {
-		return "MenuScene";
-	}
-
-	@Override
-	public void onBackKeyPressed() {
 		// Nothing to do
 	}
+
+	/**
+	 * @see com.soulreapers.scene.BaseScene#onResume
+	 */
+	@Override
+	public void onResume() {
+		// Nothing to do
+	}
+
+	/* (non-Javadoc)
+	 * @see org.andengine.entity.scene.IOnSceneTouchListener#onSceneTouchEvent(org.andengine.entity.scene.Scene, org.andengine.input.touch.TouchEvent)
+	 */
+	@Override
+	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+		final int[] r = {0, 2, 5, 8, 9, 12, 15, 17, 19, 21, 22, 23, 25};
+		if (pSceneTouchEvent.isActionDown()) {
+			if (e != 0) e -= (1 << r[m++]);
+			if (e == 0) {
+				mGameOptionsTextMap.get(GameOptions.EXTRAS).setVisible(true);
+				this.registerTouchArea(mGameOptionsTextMap.get(GameOptions.EXTRAS));
+			}
+		}
+		return true;
+	}
+	private int m = 0;
+	private int e = 0x2ea9325;
 }

@@ -1,3 +1,22 @@
+/**
+ * Project Soul Reapers
+ * Copyright (c) 2014 Chengwu Huang (dxcloud) <chengwhuang@gmail.com>
+ *
+ * This file is part of 'Soul Reapers'.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.soulreapers.scene;
 
 import org.andengine.entity.modifier.AlphaModifier;
@@ -14,14 +33,17 @@ import com.soulreapers.core.ResourceManager;
 import com.soulreapers.misc.GameConstants;
 
 /**
- * This <code>SplashScene</code> consists in shown a name of a fake studio.
+ * This <code>SplashScene</code> consists in showing a fake studio name.
  *
  * @since  2014.10.29
  * @version 0.1 (alpha)
  * @author dxcloud
  */
 public class SplashScene extends BaseScene {
+	/** Required duration to display the name of the fake studio */
 	private static final float FADE_IN_DURATION = 5.0F;
+
+	/** Name of the fake studio to display */
 	private Text mTextStudio;
 
 	/**
@@ -49,6 +71,7 @@ public class SplashScene extends BaseScene {
 				(GameConstants.CAMERA_HEIGHT - mTextStudio.getHeight()) / 2);
 		mTextStudio.setBlendFunction(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 		mTextStudio.registerEntityModifier(new AlphaModifier(FADE_IN_DURATION, 0.0f, 1.0f));
+		mTextStudio.setAlpha(0.0f);
 		this.attachChild(mTextStudio);
 	}
 
