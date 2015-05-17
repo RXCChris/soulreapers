@@ -19,7 +19,7 @@
  */
 package com.soulreapers.scene;
 
-import org.andengine.entity.modifier.AlphaModifier;
+import org.andengine.entity.modifier.FadeInModifier;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
@@ -42,9 +42,15 @@ import com.soulreapers.misc.GameConstants;
 public class SplashScene extends BaseScene {
 	/** Required duration to display the name of the fake studio */
 	private static final float FADE_IN_DURATION = 5.0F;
+	private static final int FONT_ID = ResourceManager.FONT_TITLE_ID;
+	private static final int STUDIO_ID = R.string.mg_studio;
 
 	/** Name of the fake studio to display */
-	private Text mTextStudio;
+	private Text mTextStudio = new Text(0, 0,
+			ResourceManager.getInstance().getFont(FONT_ID),
+			ResourceManager.getInstance().getResourceString(STUDIO_ID),
+			new TextOptions(HorizontalAlign.CENTER),
+			ResourceManager.getInstance().getVertexBufferObjectManager());
 
 	/**
 	 * @see com.soulreapers.scene.BaseScene#onLoadResources()
@@ -61,17 +67,12 @@ public class SplashScene extends BaseScene {
 	public void onCreate() {
 		this.setBackground(new Background(Color.BLACK));
 
-		mTextStudio = new Text(0, 0,
-				ResourceManager.getInstance().getFont(R.string.ft_03),
-				ResourceManager.getInstance().getResourceString(R.string.mg_studio),
-				new TextOptions(HorizontalAlign.CENTER),
-				ResourceManager.getInstance().getVertexBufferObjectManager());
-		mTextStudio.setScale(2.0f);
+		mTextStudio.setAlpha(0.0f);
 		mTextStudio.setPosition((GameConstants.CAMERA_WIDTH - mTextStudio.getWidth()) / 2,
 				(GameConstants.CAMERA_HEIGHT - mTextStudio.getHeight()) / 2);
 		mTextStudio.setBlendFunction(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-		mTextStudio.registerEntityModifier(new AlphaModifier(FADE_IN_DURATION, 0.0f, 1.0f));
-		mTextStudio.setAlpha(0.0f);
+		mTextStudio.registerEntityModifier(new FadeInModifier(FADE_IN_DURATION));
+
 		this.attachChild(mTextStudio);
 	}
 

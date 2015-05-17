@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<skill>
+    <attack id="1"
+        type="st"
+        name="[ST] Frappe éclaire"
+        damage="20"
+        cost="1"
+        description="DMG 20."/>
+    <attack id="2"
+        type="st"
+        name="[ST] Coup double"
+        damage="42"
+        cost="2"
+        description="DMG 42."/>
+    <attack id="3"
+        type="su"
+        name="[SU] Frappe ascendante"
+        damage="22"
+        cost="1"
+        description="DMG 22."/>
+    <attack id="4"
+        type="sd"
+        name="[SD] Plongée aérienne"
+        damage="58"
+        cost="3"
+        description="DMG 58."/>
+    <attack id="5"
+        type="sl"
+        name="[SL] Frappe horizontale"
+        damage="24"
+        cost="1"
+        description="DMG 24."/>
+    <attack id="6"
+        type="sr"
+        name="[SR] Vrille aérienne"
+        damage="40"
+        cost="2"
+        description="DMG 40."/>
+</skill>

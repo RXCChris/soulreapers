@@ -13,7 +13,9 @@ import android.os.AsyncTask;
 
 /**
  * 
- * @author chris
+ * @since 2014.10.29
+ * @version 0.1 (alpha)
+ * @author dxcloud
  *
  */
 public class SceneManager {
@@ -25,6 +27,12 @@ public class SceneManager {
 
 	private BaseScene mCurrentScene;
 	private LoadingScene mLoadingScene;
+
+	public enum SceneType {
+		TITLE_MENU,
+		GAME_MENU,
+		OPTION_MENU
+	}
 
 	private SceneManager() {
 		// nothing to do
@@ -43,13 +51,16 @@ public class SceneManager {
 		getInstance().mEngine = activity.getEngine();
 	}
 
+	public GameActivity getActivity() {
+		return mActivity;
+	}
+
 	public BaseScene getCurrentScene() {
 		return mCurrentScene;
 	}
 
-	public void setCurrentScene(BaseScene scene) {
+	private void setCurrentScene(BaseScene scene) {
 		mCurrentScene = scene;
-		Debug.i("Set a new scene " + scene.toString());
 	}
 
 	public void showSplash(OnCreateSceneCallback pOnCreateSceneCallback) {

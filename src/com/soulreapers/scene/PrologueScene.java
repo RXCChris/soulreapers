@@ -1,3 +1,22 @@
+/**
+ * Project Soul Reapers
+ * Copyright (c) 2014 Chengwu Huang (dxcloud) <chengwhuang@gmail.com>
+ *
+ * This file is part of 'Soul Reapers'.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.soulreapers.scene;
 
 import java.util.ArrayList;
@@ -19,7 +38,6 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
-import org.andengine.util.debug.Debug;
 
 import com.soulreapers.R;
 import com.soulreapers.core.AudioManager;
@@ -30,14 +48,17 @@ import com.soulreapers.misc.GameConstants;
 import com.soulreapers.misc.GameProgressionRecord;
 
 /**
- * @author CChris
+ *
+ * @since 2014.10.29
+ * @version 0.1 (alpha)
+ * @author dxcloud
  *
  */
-public class PrologueScene extends BaseScene
-implements IOnSceneTouchListener, IScrollDetectorListener {
-	private static final int PADDING = 20;
-	private static final int MAX_NUM_SELECTED_CARD = 3;
+public class PrologueScene extends BaseScene implements IOnSceneTouchListener, IScrollDetectorListener {
+	private static final int CARD_PADDING = 20;
+	private static final int MAX_NUM_SELECTABLE_CARD = 3;
 	private static final int MAX_NUM_CARD = 22;
+	private static final int FONT_ID = ResourceManager.FONT_TEXT_ID;
 	private SurfaceScrollDetector mSurfaceScrollDetector;
 	private Sprite mHintBackgroundSprite;
 	private Text mHintText;
@@ -45,6 +66,15 @@ implements IOnSceneTouchListener, IScrollDetectorListener {
 	private Rectangle mScrollBar;
 	private ArrayList<Sprite> mCardSpriteList = new ArrayList<Sprite>();
 	private ArrayList<CardDescription> mCardDescriptionList = new ArrayList<CardDescription>();
+
+	private int mXmax = 0;
+	private int mXmin = 0;
+
+	private int mNumSelectedCard = 0;
+
+	private Text mContinueText;
+	private int mNumCardToShow;
+	private int mNumClick = 0;
 
 	private class CardDescription {
 		private int mCardId;
@@ -69,14 +99,7 @@ implements IOnSceneTouchListener, IScrollDetectorListener {
 		}
 	}
 
-	private int mXmax = 0;
-	private int mXmin = 0;
 
-	private int mNumSelectedCard = 0;
-
-	private Text mContinueText;
-	private int mNumCardToShow;
-	private int mNumClick = 0;
 
 	/* (non-Javadoc)
 	 * @see org.andengine.entity.scene.IOnSceneTouchListener#onSceneTouchEvent(org.andengine.entity.scene.Scene, org.andengine.input.touch.TouchEvent)
@@ -148,7 +171,7 @@ implements IOnSceneTouchListener, IScrollDetectorListener {
 		this.attachChild(mHintBackgroundSprite);
 
 		mHintText = new Text(200, 200,
-				ResourceManager.getInstance().getFont(R.string.ft_03),
+				ResourceManager.getInstance().getFont(FONT_ID),
 				ResourceManager.getInstance().getResourceString(R.string.mg_04),
 				ResourceManager.getInstance().getResourceString(R.string.mg_04).length(),
 				new TextOptions(HorizontalAlign.CENTER),
@@ -156,7 +179,7 @@ implements IOnSceneTouchListener, IScrollDetectorListener {
 		this.attachChild(mHintText);
 
 		mContinueText = new Text(SceneManager.getInstance().getCamera().getCenterX() + 100, 420,
-				ResourceManager.getInstance().getFont(R.string.ft_03),
+				ResourceManager.getInstance().getFont(FONT_ID),
 				ResourceManager.getInstance().getResourceString(R.string.tb_12),
 				new TextOptions(HorizontalAlign.LEFT),
 				ResourceManager.getInstance().getVertexBufferObjectManager()) {
@@ -178,7 +201,6 @@ implements IOnSceneTouchListener, IScrollDetectorListener {
 					} else if (mNumClick == 2) {
 						showResolvedCard(2, 13);
 					} else {
-						Debug.i("end of prologue->continue to game");
 						GameProgressionRecord.getInstance().setConditionState(0, ConditionState.DONE);
 						SceneManager.getInstance().showScene(GameScene.class);
 					}
@@ -190,6 +212,7 @@ implements IOnSceneTouchListener, IScrollDetectorListener {
 
 		this.attachChild(mContinueText);
 		this.registerTouchArea(mContinueText);
+		this.setTouchAreaBindingOnActionDownEnabled(true);
 	}
 
 	private void destroyHint() {
@@ -207,28 +230,28 @@ implements IOnSceneTouchListener, IScrollDetectorListener {
 		this.setOnSceneTouchListener(this);
 		this.setOnSceneTouchListenerBindingOnActionDownEnabled(true);
 
-		mXmax = PADDING;
+		mXmax = CARD_PADDING;
 		for (int i = 0; i < MAX_NUM_CARD; ++i) {
-			Sprite sprite = new Sprite(mXmax, PADDING,
+			Sprite sprite = new Sprite(mXmax, CARD_PADDING,
 					mCardDescriptionList.get(mCardDescriptionList.size() - 1).getCardTextureRegion(),
 					ResourceManager.getInstance().getVertexBufferObjectManager()) {
 				@Override
 				public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
 						final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 					if ((pSceneTouchEvent.isActionDown())
-							&& (pTouchAreaLocalX < getWidth() - PADDING)) {
-						if (mNumSelectedCard <= MAX_NUM_SELECTED_CARD) {
-							if (getY() <= PADDING) {
-								if (++mNumSelectedCard > MAX_NUM_SELECTED_CARD) {
-									mNumSelectedCard = MAX_NUM_SELECTED_CARD;
+							&& (pTouchAreaLocalX < getWidth() - CARD_PADDING)) {
+						if (mNumSelectedCard <= MAX_NUM_SELECTABLE_CARD) {
+							if (getY() <= CARD_PADDING) {
+								if (++mNumSelectedCard > MAX_NUM_SELECTABLE_CARD) {
+									mNumSelectedCard = MAX_NUM_SELECTABLE_CARD;
 								} else {
-									setPosition(getX(), getY() + PADDING);
+									setPosition(getX(), getY() + CARD_PADDING);
 								}
 							} else {
 								if (--mNumSelectedCard <= 0) {
 									mNumSelectedCard = 0;
 								}
-								setPosition(getX(), PADDING);
+								setPosition(getX(), CARD_PADDING);
 							}
 						}
 						confirmCard();
@@ -239,13 +262,13 @@ implements IOnSceneTouchListener, IScrollDetectorListener {
 			mCardSpriteList.add(sprite);
 			this.attachChild(sprite);
 			this.registerTouchArea(sprite);
-			mXmax += sprite.getWidth() - PADDING;
+			mXmax += sprite.getWidth() - CARD_PADDING;
 		}
-		mXmax += PADDING * 2;
+		mXmax += CARD_PADDING * 2;
 		float scrollBarSize = GameConstants.CAMERA_WIDTH * GameConstants.CAMERA_WIDTH / mXmax;
 		mScrollBar = new Rectangle(0,
-				GameConstants.CAMERA_HEIGHT - PADDING,
-				scrollBarSize, PADDING,
+				GameConstants.CAMERA_HEIGHT - CARD_PADDING,
+				scrollBarSize, CARD_PADDING,
 				ResourceManager.getInstance().getVertexBufferObjectManager());
 		mScrollBar.setColor(Color.BLUE);
 		this.attachChild(mScrollBar);
@@ -254,7 +277,7 @@ implements IOnSceneTouchListener, IScrollDetectorListener {
 	private void resetCard() {
 		for (int i = 0; i < mCardSpriteList.size(); ++i){
 			Sprite sprite = mCardSpriteList.get(i);
-			sprite.setPosition(sprite.getX(), PADDING);
+			sprite.setPosition(sprite.getX(), CARD_PADDING);
 		}
 		mNumSelectedCard = 0;
 	}
@@ -271,7 +294,7 @@ implements IOnSceneTouchListener, IScrollDetectorListener {
 	private int randomInt(int previous) {
 		int r = (int) (Math.random() * MAX_NUM_CARD); // from 0 to MAX_NUM_CARD - 1 (i.e. 21)
 		if (r == previous) {
-			r = (r + 1)  % MAX_NUM_CARD;
+			r = (r + 1) % MAX_NUM_CARD;
 		}
 		if (r == 13) {
 			++r;
@@ -280,16 +303,16 @@ implements IOnSceneTouchListener, IScrollDetectorListener {
 	}
 
 	private void showResolvedCard(int numCard, int numCardToShow) {
-		float x = PADDING;
-		float y = numCard * (100 + PADDING) + PADDING;
+		float x = CARD_PADDING;
+		float y = numCard * (100 + CARD_PADDING) + CARD_PADDING;
 
 		Sprite sprite = new Sprite(x, y,
 				mCardDescriptionList.get(numCardToShow).getCardTextureRegion(),
 				ResourceManager.getInstance().getVertexBufferObjectManager());
 		this.attachChild(sprite);
 
-		Text text = new Text(x + sprite.getWidth() + PADDING, y,
-				ResourceManager.getInstance().getFont(R.string.ft_01),
+		Text text = new Text(x + sprite.getWidth() + CARD_PADDING, y,
+				ResourceManager.getInstance().getFont(FONT_ID),
 				mCardDescriptionList.get(numCardToShow).getCardDescription(),
 				new TextOptions(HorizontalAlign.LEFT),
 				ResourceManager.getInstance().getVertexBufferObjectManager());
@@ -297,9 +320,8 @@ implements IOnSceneTouchListener, IScrollDetectorListener {
 	}
 
 	private void confirmCard() {
-		if ((mNumSelectedCard >= MAX_NUM_SELECTED_CARD)) {
-			// Disables scrolling while confirm dialog is active
-			mSurfaceScrollDetector.setEnabled(false);
+		if ((mNumSelectedCard >= MAX_NUM_SELECTABLE_CARD)) {
+			mSurfaceScrollDetector.setEnabled(false); // Disables scrolling while confirm dialog is active
 			this.setChildScene(new ConfirmDialog() {
 				@Override
 				protected void onPositive() {
@@ -321,7 +343,9 @@ implements IOnSceneTouchListener, IScrollDetectorListener {
 	 */
 	@Override
 	public void onDestroyResources() {
-		// Nothing to do
+		if (this.hasChildScene()) {
+			this.clearChildScene();
+		}
 	}
 
 	/* (non-Javadoc)
@@ -377,9 +401,7 @@ implements IOnSceneTouchListener, IScrollDetectorListener {
 	public void onScroll(ScrollDetector pScollDetector, int pPointerID,
 			float pDistanceX, float pDistanceY) {
 		Camera camera = SceneManager.getInstance().getCamera();
-
-		// Moves camera
-		camera.offsetCenter(-pDistanceX, 0);
+		camera.offsetCenter(-pDistanceX, 0); // Moves camera
 
 		// Controls side effect
 		if (camera.getCenterX() < (mXmin + GameConstants.CAMERA_WIDTH / 2)) {

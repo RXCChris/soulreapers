@@ -1,5 +1,8 @@
 package com.soulreapers.scene;
 
+import java.util.HashMap;
+
+import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.input.touch.TouchEvent;
@@ -10,42 +13,48 @@ import com.soulreapers.R;
 import com.soulreapers.core.AudioManager;
 import com.soulreapers.core.ResourceManager;
 import com.soulreapers.core.SceneManager;
+import com.soulreapers.misc.GameConstants;
 
 public class OptionsMenuScene extends BaseScene {
-	private Text mTextBgm;
-	private boolean mBgmEnabled = true;
-
-	private Text mTextBack;
+	private static final int MAX_CHAR_OPTION = 12;
+	private HashMap<Integer, Text> mOptionsTextMap = new HashMap<Integer, Text>();
+	private static final int FONT_ID = ResourceManager.FONT_TEXT_ID;
 
 	@Override
 	public void onLoadResources() {
-		// TODO Auto-generated method stub
-
+		// Nothing to do
 	}
 
 	@Override
 	public void onCreate() {
-//		mTextBgm = new Text(100, 100, ResourceManager.getInstance().getFont(R.string.ft_04), "BGM  ON", "BGMXXXXXXX".length(), new TextOptions(HorizontalAlign.LEFT), mVbom) {
-		mTextBgm = new Text(100, 100, ResourceManager.getInstance().getFont(R.string.ft_04), "BGM  ON", "BGMXXXXXXX".length(), new TextOptions(HorizontalAlign.LEFT), ResourceManager.getInstance().getVertexBufferObjectManager()) {
+		int key;
+		key = R.string.tb_o01;
+		mOptionsTextMap.put(key,
+				new Text(100, 100,
+						ResourceManager.getInstance().getFont(FONT_ID),
+						ResourceManager.getInstance().getResourceString(key),
+						MAX_CHAR_OPTION,
+						new TextOptions(HorizontalAlign.LEFT),
+						ResourceManager.getInstance().getVertexBufferObjectManager()) {
 			@Override
-			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
+					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				Debug.i("You touched BGM");
 				if (pSceneTouchEvent.isActionDown()) {
-					mBgmEnabled = !mBgmEnabled;
-					if (mBgmEnabled) {
-						AudioManager.getInstance().enableMusic(true);
-						mTextBgm.setText("BGM    " + "ON");
-					} else {
-						AudioManager.getInstance().enableMusic(false);
-						mTextBgm.setText("BGM    " + "OFF");
-					}
+					AudioManager.getInstance().setMusicEnabled(
+							!AudioManager.getInstance().isMusicEnabled());
 				}
 				return true;
 			}
-		};
+		});
 
-//		mTextBack = new Text(500, 420, ResourceManager.getInstance().getFont(R.string.ft_04), mActivity.getString(R.string.tb_09), new TextOptions(HorizontalAlign.LEFT), mVbom) {
-		mTextBack = new Text(500, 420, ResourceManager.getInstance().getFont(R.string.ft_04), ResourceManager.getInstance().getResourceString(R.string.tb_09), new TextOptions(HorizontalAlign.LEFT), ResourceManager.getInstance().getVertexBufferObjectManager()) {
+		key = R.string.tb_09;
+		mOptionsTextMap.put(key, new Text(GameConstants.X_OPTION_TEXT_PADDING,
+				GameConstants.Y_OPTION_TEXT_PADDING * 8,
+				ResourceManager.getInstance().getFont(FONT_ID),
+				ResourceManager.getInstance().getResourceString(R.string.tb_09),
+				new TextOptions(HorizontalAlign.LEFT),
+				ResourceManager.getInstance().getVertexBufferObjectManager()) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
 					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
@@ -55,37 +64,60 @@ public class OptionsMenuScene extends BaseScene {
 				}
 				return true;
 			}
-		};
-		registerTouchArea(mTextBgm);
-		registerTouchArea(mTextBack);
+		});
 
-		attachChild(mTextBgm);
-		attachChild(mTextBack);
+		this.registerUpdateHandler(new IUpdateHandler() {
+			@Override
+			public void onUpdate(float pSecondsElapsed) {
+				if (AudioManager.getInstance().isMusicEnabled()) {
+					mOptionsTextMap.get(R.string.tb_o01).setText(
+							ResourceManager.getInstance().getResourceString(R.string.tb_o01)
+							+ "      "
+							+ ResourceManager.getInstance().getResourceString(R.string.tb_yes));
+				} else {
+					mOptionsTextMap.get(R.string.tb_o01).setText(
+							ResourceManager.getInstance().getResourceString(R.string.tb_o01)
+							+ "      "
+							+ ResourceManager.getInstance().getResourceString(R.string.tb_no));
+				}
+			}
+			@Override
+			public void reset() {
+				// Nothing to do
+			}
+			
+		});
+
+		for (Text optionText : mOptionsTextMap.values()) {
+			this.registerTouchArea(optionText);
+			this.attachChild(optionText);
+		}
+		this.setTouchAreaBindingOnActionDownEnabled(true);
 	}
 
 	@Override
 	public void onDestroyResources() {
-		// TODO Auto-generated method stub
-
+		// Nothing to do
 	}
 
 	@Override
 	public void onDestroy() {
-		// TODO Auto-generated method stub
-//		this.detachSelf();
-//		this.dispose();
+		for (Text optionText : mOptionsTextMap.values()) {
+			this.unregisterTouchArea(optionText);
+			optionText.detachSelf();
+			optionText.dispose();
+		}
+		this.detachSelf();
+		this.dispose();
 	}
 
 	@Override
 	public void onPause() {
-		// TODO Auto-generated method stub
-
+		// Nothing to do
 	}
 
 	@Override
 	public void onResume() {
-		// TODO Auto-generated method stub
-
+		// Nothing to do
 	}
-
 }

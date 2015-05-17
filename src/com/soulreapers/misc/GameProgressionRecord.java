@@ -9,15 +9,19 @@ import java.util.ArrayList;
  * @author CChris
  *
  */
-public class GameProgression {
-	private static final int CONDITIONS = 5;
-	private static ArrayList<ConditionState> mProgress = new ArrayList<ConditionState>();
+public class GameProgressionRecord {
+	private static final GameProgressionRecord INSTANCE = new GameProgressionRecord();
+	private final int CONDITIONS = 5;
+	private ArrayList<ConditionState> mProgress = new ArrayList<ConditionState>();
 
-	public GameProgression() {
-//		Iterator<ProgressionState> it = mProgress.iterator();
+	private GameProgressionRecord() {
 		for (int i = 0; i < CONDITIONS; i++) {
-			mProgress.add(ConditionState.NONE);
+			mProgress.add(ConditionState.DONE);
 		}
+	}
+
+	public static GameProgressionRecord getInstance() {
+		return INSTANCE;
 	}
 
 	/**
@@ -27,7 +31,7 @@ public class GameProgression {
 	 * @return
 	 * @throws IllegalArgumentException
 	 */
-	public boolean isConditon(int conditionNum, ConditionState conditionState) throws IllegalArgumentException {
+	public boolean isCondition(int conditionNum, ConditionState conditionState) throws IllegalArgumentException {
 		if (CONDITIONS <= conditionNum) {
 			throw new IllegalArgumentException("Condition number exceeds the total number of conditions");
 		} else {

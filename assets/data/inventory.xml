@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inventory>
+    <item id="1"
+        type="combat"
+        name="Quartz spectral"
+        description="Gemme contenant le pouvoir des soins curatifs."/>
+    <item id="10"
+        type="combat"
+        name="Rubis spectral"
+        description="Gemme contenant le pouvoir des flammes infernales."/>
+    <item id="20"
+        type="combat"
+        name="Saphir spectral"
+        description="Gemme contenant le pouvoir des eaux abyssales."/>
+    <item id="30"
+        type="combat"
+        name="Emeraude spectrale"
+        description="Gemme contenant le pouvoir des vents cinglants."/>
+    <item id="40"
+        type="combat"
+        name="Topaze spectrale"
+        description="Gemme contenant le pouvoir des secousses sismiques."/>
+    <item id="100"
+        type="weapon"
+        name="Faux des Reapers"
+        description="Arme de base des Reapers."/>
+    <item id="200"
+        type="accessory"
+        name="Foulard"
+        description="Foulard basique avec des motifs carrés."/>
+    <item id="300"
+        type="loot"
+        name="Croc de vampire"
+        description="Croc de couleur rouge."/>
+    <item id="400"
+        type="key"
+        name="Sceau des Reapers"
+        description="Symbole sacré des Reapers qui a la forme d'un crâne"/>
+</inventory>

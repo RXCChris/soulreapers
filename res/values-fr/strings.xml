@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <string name="app_name">Soul Reapers</string>
+        <string name="menu_main">Menu Principal</string>
+        <string name="menu_inventory">Inventaire</string>
+        <string name="menu_equip">Equipement</string>
+</resources>

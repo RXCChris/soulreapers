@@ -40,13 +40,13 @@ import com.soulreapers.core.AudioManager;
 import com.soulreapers.core.ResourceManager;
 import com.soulreapers.core.SceneManager;
 import com.soulreapers.misc.GameConstants;
-import com.soulreapers.object.character.Ally;
 import com.soulreapers.object.character.CharacterCollection;
+import com.soulreapers.object.character.reaper.Reaper;
 
 
 public class GameScene extends BaseScene {
-	private static final int FONT_ID = R.string.ft_command;
-	private static final int FONT_TITLE_ID = R.string.ft_03;
+	private static final int FONT_ID = ResourceManager.FONT_OPTION_ID;
+	private static final int FONT_TITLE_ID = ResourceManager.FONT_TITLE_ID;
 
 	private HashMap<OptionMenu, Text> mOptionTextMap = new HashMap<OptionMenu, Text>();
 
@@ -56,7 +56,7 @@ public class GameScene extends BaseScene {
 	private BitmapTextureAtlas mBackgroundTextureAtlas;
 	private Sprite mBackgroundSprite;
 
-	private Text mMenuText = new Text(GameConstants.X_SUBMENU_PADDING,
+	private Text mTextMenuTitle = new Text(GameConstants.X_SUBMENU_PADDING,
 			GameConstants.Y_SUBMENU_PADDING,
 			ResourceManager.getInstance().getFont(FONT_TITLE_ID),
 			ResourceManager.getInstance().getResourceString(R.string.tb_main),
@@ -80,8 +80,7 @@ public class GameScene extends BaseScene {
 				scene.setChildScene(new ConfirmDialog(
 						"Retourner a l'ecran titre ?",
 						ResourceManager.getInstance().getResourceString(R.string.tb_yes),
-						ResourceManager.getInstance().getResourceString(R.string.tb_no),
-						true) {
+						ResourceManager.getInstance().getResourceString(R.string.tb_no)) {
 					@Override
 					protected void onPositive() {
 						back();
@@ -102,7 +101,7 @@ public class GameScene extends BaseScene {
 			}
 			@Override
 			public void setSubMenu(GameScene scene) {
-				scene.mMenuText.setText(OptionMenu.ITEMS.toString());
+				scene.mTextMenuTitle.setText(OptionMenu.ITEMS.toString());
 				createSubMenu(scene);
 			}
 
@@ -119,7 +118,7 @@ public class GameScene extends BaseScene {
 			}
 			@Override
 			public void setSubMenu(GameScene scene) {
-				scene.mMenuText.setText(OptionMenu.EQUIP.toString());
+				scene.mTextMenuTitle.setText(OptionMenu.EQUIP.toString());
 				createSubMenu(scene);
 			}
 
@@ -136,12 +135,13 @@ public class GameScene extends BaseScene {
 			}
 			@Override
 			public void setSubMenu(GameScene scene) {
-				scene.mMenuText.setText(OptionMenu.STATUS.toString());
+				scene.mTextMenuTitle.setText(OptionMenu.STATUS.toString());
 				createSubMenu(scene);
 				scene.mPlayer.setVisible(true);
-				scene.mPlayer.updateSkill();
-				scene.mPlayer.setSkillVisible(true);
-				scene.mPlayer.setStatusVisible(false);
+//				scene.mPlayer.updateSkill();
+//				scene.mPlayer.updateStatus();
+//				scene.mPlayer.setSkillVisible(true);
+//				scene.mPlayer.setStatusVisible(false);
 			}
 
 			@Override
@@ -158,7 +158,7 @@ public class GameScene extends BaseScene {
 			}
 			@Override
 			public void setSubMenu(GameScene scene) {
-				scene.mMenuText.setText(OptionMenu.MAP.toString());
+				scene.mTextMenuTitle.setText(OptionMenu.MAP.toString());
 				createSubMenu(scene);
 				SceneManager.getInstance().showScene(BattleScene.class);
 			}
@@ -176,7 +176,7 @@ public class GameScene extends BaseScene {
 			}
 			@Override
 			public void setSubMenu(GameScene scene) {
-				scene.mMenuText.setText(OptionMenu.DIARY.toString());
+				scene.mTextMenuTitle.setText(OptionMenu.DIARY.toString());
 				createSubMenu(scene);
 			}
 
@@ -193,7 +193,7 @@ public class GameScene extends BaseScene {
 			}
 			@Override
 			public void setSubMenu(GameScene scene) {
-				scene.mMenuText.setText(OptionMenu.SAVE.toString());
+				scene.mTextMenuTitle.setText(OptionMenu.SAVE.toString());
 				createSubMenu(scene);
 			}
 
@@ -242,7 +242,7 @@ public class GameScene extends BaseScene {
 				}
 			}
 			scene.mCurrentMenu = MAIN;
-			scene.mMenuText.setText(ResourceManager.getInstance()
+			scene.mTextMenuTitle.setText(ResourceManager.getInstance()
 					.getResourceString(R.string.tb_main));
 		}
 	} // enum OptionMenu
@@ -257,7 +257,7 @@ public class GameScene extends BaseScene {
 		mBackgroundTextureAtlas.load();
 	}
 
-	private Ally mPlayer = (Ally) CharacterCollection.getInstance().getCharacter("Dante");
+	private Reaper mPlayer = (Reaper) CharacterCollection.getInstance().getCharacter("Dante");
 
 	@Override
 	public void onCreate() {
@@ -276,7 +276,7 @@ public class GameScene extends BaseScene {
 				GameConstants.Y_SUBMENU_PADDING + GameConstants.FONT_SIZE,
 				GameConstants.CAMERA_WIDTH - GameConstants.X_OPTION_TEXT_PADDING,
 				5, ResourceManager.getInstance().getVertexBufferObjectManager()));
-		this.attachChild(mMenuText);
+		this.attachChild(mTextMenuTitle);
 		createSubMenu();
 		this.setTouchAreaBindingOnActionDownEnabled(true);
 	}
@@ -348,8 +348,8 @@ public class GameScene extends BaseScene {
 		AudioManager.getInstance().pauseMusic();
 		mPlayer.detachSelf(); // Do not dispose GameCharacter
 
-		mMenuText.detachSelf();
-		mMenuText.dispose();
+		mTextMenuTitle.detachSelf();
+		mTextMenuTitle.dispose();
 
 		for (Text object : mOptionTextMap.values()) {
 			unregisterTouchArea(object);

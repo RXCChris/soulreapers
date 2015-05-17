@@ -21,13 +21,13 @@ import com.soulreapers.core.AudioManager;
 import com.soulreapers.core.ResourceManager;
 import com.soulreapers.core.SceneManager;
 import com.soulreapers.misc.GameConstants;
+import com.soulreapers.object.item.GameDataDictionary;
 
 public class GameActivity extends BaseGameActivity {
 
 	/*
 	 * Constants
 	 */
-
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
@@ -58,12 +58,14 @@ public class GameActivity extends BaseGameActivity {
 		ResourceManager.getInstance().initialize(this);
 		AudioManager.getInstance().initialize(this);
 		SceneManager.getInstance().initialize(this);
+		GameDataDictionary.getInstance().initialize(this);
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
 
 	@Override
 	public void onDestroy() {
 		Debug.i(">>GameActivity call onDestroy");
+
 		ResourceManager.getInstance().onDestroy();
 		AudioManager.getInstance().onDestroy();
 		super.onDestroy();
@@ -71,21 +73,21 @@ public class GameActivity extends BaseGameActivity {
 
 	@Override
 	protected void onPause() {
+		super.onPause();
 		if (this.isGameLoaded()) {
 			SceneManager.getInstance().getCurrentScene().onPause();
 			AudioManager.getInstance().pauseMusic();
 		}
-		super.onPause();
 	}
 
 	@Override
 	protected synchronized void onResume() {
+		super.onResume();
 		System.gc();
 		if (this.isGameLoaded()) {
 			SceneManager.getInstance().getCurrentScene().onResume();
 			AudioManager.getInstance().resumeMusic();
 		}
-		super.onResume();
 	}
 
 	@Override
@@ -122,22 +124,23 @@ public class GameActivity extends BaseGameActivity {
 			}
 		}
 		if (pKeyCode == KeyEvent.KEYCODE_BACK) {
-			quit();
+//			quit();
+			finish();
 		}
 		return false;
 	}
 
-	public void quit() {
-		new AlertDialog.Builder(this).setMessage("Etes-vous sur de vouloir quitter ?")
-		                             .setCancelable(false)
-		                             .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-										
-										@Override
-										public void onClick(DialogInterface dialog, int which) {
-											finish();
-										}
-									})
-									.setNegativeButton("Non", null)
-									.show();
-	}
+//	public void quit() {
+//		new AlertDialog.Builder(this).setMessage("Etes-vous sur de vouloir quitter ?")
+//		                             .setCancelable(false)
+//		                             .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+//										
+//										@Override
+//										public void onClick(DialogInterface dialog, int which) {
+//											finish();
+//										}
+//									})
+//									.setNegativeButton("Non", null)
+//									.show();
+//	}
 }

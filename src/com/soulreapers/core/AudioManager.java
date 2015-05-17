@@ -2,9 +2,11 @@ package com.soulreapers.core;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
+import org.andengine.audio.music.exception.MusicReleasedException;
 import org.andengine.util.debug.Debug;
 
 import com.soulreapers.GameActivity;
@@ -28,7 +30,7 @@ public class AudioManager {
 	/**
 	 * Enable music to play whether set to <b>true</b>, disable it otherwise.
 	 */
-	private boolean mMusicEnabled = true;
+	private boolean mMusicEnabled = false;
 
 	private HashMap<Integer, Music> mMusicMap = new HashMap<Integer, Music>();
 
@@ -64,31 +66,54 @@ public class AudioManager {
 		mActivity = activity;
 	}
 
+	public boolean isMusicEnabled() {
+		return mMusicEnabled;
+	}
+
 	/**
 	 * Play a new track.
 	 * @param track Number of track to play
-	 * @see #playMusic(int, boolean)
+	 * @see #playMusic(int, boolean, boolean)
 	 */
-	public void playMusic(int track) {
-		playMusic(track, false);
+	public void playMusic(int pTrack, boolean pReset) {
+		playMusic(pTrack, true, pReset);
+	}
+
+	/**
+	 * Play a new track.
+	 * @param track Number of track to play
+	 * @see #playMusic(int, boolean, boolean)
+	 */
+	public void playMusic(int pTrack) {
+		playMusic(pTrack, true, true);
 	}
 
 	/**
 	 * Play a new track.
 	 * @param track Number of track to play
 	 * @param loop Enable to loop the music whether set to <b>true</b>.
-	 * @see #playMusic(int)
 	 */
-	public void playMusic(int track, boolean loop) {
-		if (mMusicEnabled) {
-			if (!mMusicMap.containsKey(track)) {
-				loadMusic(track);
-			}
-			mPlayingTrack = track;
-			mMusicMap.get(mPlayingTrack).setLooping(loop);
-			mMusicMap.get(mPlayingTrack).play();
+	public void playMusic(int pTrack, boolean pLoop, boolean pReset) {
+		if (!mMusicMap.containsKey(pTrack)) {
+			loadMusic(pTrack);
 		}
-		Debug.i(">>>play music");
+
+		if (!mMusicEnabled) { return; }
+
+		if (mMusicMap.containsKey(pTrack) && isMusicEnabled()) {
+			Music music = mMusicMap.get(pTrack);
+			try {
+				music.setLooping(pLoop);
+				if (pReset) {
+					music.seekTo(0);
+				}
+				music.play();
+			} catch (MusicReleasedException e) {
+				e.printStackTrace();
+			}
+		}
+		mPlayingTrack = pTrack;
+		Debug.d("AudioManager : playing " + mActivity.getString(pTrack));
 	}
 
 	/**
@@ -96,15 +121,15 @@ public class AudioManager {
 	 * @param track Track to load
 	 * @see MusicTrack
 	 */
-	private void loadMusic(int track) {
-		Debug.i(">>>load music");
+	private void loadMusic(int pTrack) {
 		try {
-			mMusicMap.put(track,
+			mMusicMap.put(pTrack,
 					MusicFactory.createMusicFromAsset(mActivity.getMusicManager(),
-							mActivity, mActivity.getString(track)));
+							mActivity, mActivity.getString(pTrack)));
 		} catch (IOException e) {
-			Debug.e(e);
+			e.printStackTrace();
 		}
+		Debug.i("AudioManager : loaded " + mActivity.getString(pTrack));
 	}
 
 	/**
@@ -113,8 +138,12 @@ public class AudioManager {
 	public void pauseMusic() {
 		if (mMusicMap.containsKey(mPlayingTrack)) {
 			if (mMusicMap.get(mPlayingTrack).isPlaying()) {
-				mMusicMap.get(mPlayingTrack).pause();
-				Debug.i(">>>pause music");
+				try {
+					mMusicMap.get(mPlayingTrack).pause();
+				} catch (MusicReleasedException e) {
+					e.printStackTrace();
+				}
+				Debug.i("AudioManager : paused " + mActivity.getString(mPlayingTrack));
 			}
 		}
 	}
@@ -123,9 +152,13 @@ public class AudioManager {
 	 * Resume the previously paused music
 	 */
 	public void resumeMusic() {
-		if (mMusicMap.containsKey(mPlayingTrack)) {
-			mMusicMap.get(mPlayingTrack).resume();
-			Debug.i(">>>resume music");
+		if (mMusicMap.containsKey(mPlayingTrack) && mMusicEnabled) {
+			try {
+				mMusicMap.get(mPlayingTrack).resume();
+			} catch (MusicReleasedException e) {
+				e.printStackTrace();
+			}
+			Debug.d("AudioManager : resumed " + mActivity.getString(mPlayingTrack));
 		}
 	}
 
@@ -136,34 +169,43 @@ public class AudioManager {
 	 * may be replaying again.
 	 * </p>
 	 */
-	public void stopMusic() {
-		if (mMusicMap.containsKey(mPlayingTrack)) {
-			if (mMusicMap.get(mPlayingTrack).isPlaying()) {
-				mMusicMap.get(mPlayingTrack).stop();
-			}
-		}
-	}
+//	public void stopMusic() {
+//		if (mMusicMap.containsKey(mPlayingTrack)) {
+//			if (mMusicMap.get(mPlayingTrack).isPlaying()) {
+//				mMusicMap.get(mPlayingTrack).stop();
+//			}
+//		}
+//	}
 
 	/**
 	 * Enable/Disable the music to play.
 	 * @param enabled Enable the music to play whether set to <b>true</p>,
 	 * disable it otherwise
 	 */
-	public void enableMusic(boolean enabled) {
-		mMusicEnabled = enabled;
+	public void setMusicEnabled(boolean pEnabled) {
+		Debug.d("AudioManager : "
+				+ ((mMusicEnabled) ? "enabled" : "disabled")
+				+ " playing music.");
+
+		mMusicEnabled = pEnabled;
 		if (mMusicEnabled == false) {
 			pauseMusic();
 		} else {
 			resumeMusic();
 		}
-
 	}
 
 	public void onDestroy() {
-		for (Music music : mMusicMap.values()) {
-			music.release();
-			Debug.i(">>>release music");
+		for (Entry<Integer, Music> musicEntry : mMusicMap.entrySet()) {
+			try {
+				musicEntry.getValue().stop();
+				musicEntry.getValue().release();
+				Debug.d("AudioManager : released " + mActivity.getString(musicEntry.getKey()));
+			} catch (MusicReleasedException e) {
+				e.printStackTrace();
+			}
 		}
+		Debug.i("AudioManager : destroyed AudioManager.");
 		mMusicMap.clear();
 		mPlayingTrack = 0;
 	}
