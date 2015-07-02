@@ -3,7 +3,7 @@
  */
 package com.soulreapers.object.item;
 
-import com.soulreapers.misc.Attributes.AttributeType;
+import com.soulreapers.misc.CharacterParameters.AttributeType;
 import com.soulreapers.object.character.BattleCharacter;
 import com.soulreapers.object.character.GameCharacter.CharacterType;
 
@@ -26,12 +26,11 @@ public class HealEffect extends Effect {
 	 */
 	@Override
 	public void apply(BattleCharacter pUser, BattleCharacter pTarget) {
-		float value = mBaseValue;
-		if (getValueType() == ValueType.PROPORTIONAL) {
-			value *= pTarget.getAttributes().getTotal(AttributeType.SOUL);
-		}
-//		final float value = 
-		pTarget.getAttributes().increaseCurrent(AttributeType.SOUL, (int) value);
+//		float value = mBaseValue;
+//		if (getValueType() == ValueType.PROPORTIONAL) {
+//			value *= pTarget.getAttributes().getTotal(AttributeType.SOUL);
+//		}
+//		pTarget.getAttributes().increaseCurrent(AttributeType.SOUL, (int) value);
 	}
 
 	/* (non-Javadoc)

@@ -7,7 +7,9 @@ import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.util.HorizontalAlign;
 
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
+import com.soulreapers.core.FontManager.FontType;
 import com.soulreapers.misc.GameConstants;
 import com.soulreapers.object.item.ItemBase;
 
@@ -15,6 +17,7 @@ import com.soulreapers.object.item.ItemBase;
  * @author chris
  *
  */
+@Deprecated
 public class SlotItem<T extends ItemBase> extends Slot<T> {
 	private static final float RECTANGLE_OFFSET_X = 10;
 	private static final float RECTANGLE_OFFSET_Y = 48;
@@ -27,13 +30,13 @@ public class SlotItem<T extends ItemBase> extends Slot<T> {
 //	private Text mTextName;
 //	private Text mTextQuantity;
 	private Text mTextName = new Text(TEXT_PADDING_X, 0,
-			ResourceManager.getInstance().getFont(FONT_TEXT_ID),
+			FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 			"",
 			GameConstants.MAX_CHARACTER_SIZE,
 			ResourceManager.getInstance().getVertexBufferObjectManager());
 
 	private Text mTextQuantity = new Text(QUANTITY_PADDING_X, 0,
-			ResourceManager.getInstance().getFont(FONT_TEXT_ID),
+			FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 			"",
 			QUANTITY_CHAR_SIZE,
 			new TextOptions(HorizontalAlign.CENTER),

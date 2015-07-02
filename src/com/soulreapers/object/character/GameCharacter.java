@@ -19,39 +19,32 @@
  */
 package com.soulreapers.object.character;
 
-import org.andengine.entity.sprite.Sprite;
-import org.andengine.util.debug.Debug;
 
-import com.soulreapers.core.ResourceManager;
-import com.soulreapers.misc.GameConstants;
-
-public abstract class GameCharacter extends Sprite {
+public abstract class GameCharacter {
 	public enum CharacterType {
 		REAPER,
 		REMNANT,
 		NPC
 	}
 
-	private static final int SPRITE_CHARACTER_WIDTH = 320;
-	private static final int SPRITE_CHARACTER_HEIGHT = 480;
-
+	protected final int mID;
 	protected final String mName;
 	protected final CharacterType mCharacterType;
-	protected final int mIllustrationId;
+	protected final int mIllustrationID;
 
-	public GameCharacter(final String pName, final int pResId, CharacterType pCharacterType) {
-		super(0, 0,
-				SPRITE_CHARACTER_WIDTH,
-				SPRITE_CHARACTER_HEIGHT,
-				ResourceManager.getInstance().loadTexture(pResId,
-						GameConstants.CHARACTER_SPRITE_WIDTH,
-						GameConstants.CHARACTER_SPRITE_HEIGHT),
-				ResourceManager.getInstance().getVertexBufferObjectManager());
-		mName = pName;
+	public GameCharacter(final int pID,
+			final CharacterType pCharacterType,
+			final String pName,
+			final int pIllustrationID) {
+		mID = pID;
 		mCharacterType = pCharacterType;
-		mIllustrationId = pResId;
+		mName = pName;
+		mIllustrationID = pIllustrationID;
 	}
 
+	public int getID() {
+		return mID;
+	}
 	/**
 	 * @return The name of the character
 	 */
@@ -59,13 +52,11 @@ public abstract class GameCharacter extends Sprite {
 		return mName;
 	}
 
-	public int getIllustrationId() {
-		return mIllustrationId;
+	public int getIllustrationID() {
+		return mIllustrationID;
 	}
 
 	public CharacterType getCharacterType() {
 		return mCharacterType;
 	}
-
-//	public abstract T instanciate();
 }

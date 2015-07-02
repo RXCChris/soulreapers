@@ -10,6 +10,8 @@ import org.andengine.util.HorizontalAlign;
 
 import android.opengl.GLES20;
 
+import com.soulreapers.core.FontManager;
+import com.soulreapers.core.FontManager.FontType;
 import com.soulreapers.core.ResourceManager;
 
 /**
@@ -20,7 +22,6 @@ import com.soulreapers.core.ResourceManager;
  * <b>FadeOutText</b> is automatically destroyed its modifier is finished.
  */
 public class FadeOutText extends Text {
-	private static final int FONT_ID = ResourceManager.FONT_TEXT_ID;
 	private FadeOutModifier mFadeOutModifier;
 
 	/**
@@ -30,7 +31,7 @@ public class FadeOutText extends Text {
 	 */
 	public FadeOutText(float pX, float pY, final String pText, float pDuration) {
 		super(pX, pY,
-				ResourceManager.getInstance().getFont(FONT_ID),
+				FontManager.getInstance().getFont(FontType.FONT_TEXT_MEDIUM),
 				pText,
 				ResourceManager.getInstance().getVertexBufferObjectManager());
 		this.setBlendFunction(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);

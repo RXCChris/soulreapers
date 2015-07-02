@@ -11,14 +11,17 @@ import org.andengine.util.debug.Debug;
 
 import com.soulreapers.R;
 import com.soulreapers.core.AudioManager;
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
 import com.soulreapers.core.SceneManager;
+import com.soulreapers.core.FontManager.FontType;
 import com.soulreapers.misc.GameConstants;
 
-public class OptionsMenuScene extends BaseScene {
+@Deprecated
+public class OptionsMenuScene extends UI_Scene {
 	private static final int MAX_CHAR_OPTION = 12;
 	private HashMap<Integer, Text> mOptionsTextMap = new HashMap<Integer, Text>();
-	private static final int FONT_ID = ResourceManager.FONT_TEXT_ID;
+//	private static final int FONT_ID = ResourceManager.FONT_TEXT_ID;
 
 	@Override
 	public void onLoadResources() {
@@ -31,7 +34,7 @@ public class OptionsMenuScene extends BaseScene {
 		key = R.string.tb_o01;
 		mOptionsTextMap.put(key,
 				new Text(100, 100,
-						ResourceManager.getInstance().getFont(FONT_ID),
+						FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 						ResourceManager.getInstance().getResourceString(key),
 						MAX_CHAR_OPTION,
 						new TextOptions(HorizontalAlign.LEFT),
@@ -51,7 +54,7 @@ public class OptionsMenuScene extends BaseScene {
 		key = R.string.tb_09;
 		mOptionsTextMap.put(key, new Text(GameConstants.X_OPTION_TEXT_PADDING,
 				GameConstants.Y_OPTION_TEXT_PADDING * 8,
-				ResourceManager.getInstance().getFont(FONT_ID),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 				ResourceManager.getInstance().getResourceString(R.string.tb_09),
 				new TextOptions(HorizontalAlign.LEFT),
 				ResourceManager.getInstance().getVertexBufferObjectManager()) {
@@ -60,7 +63,7 @@ public class OptionsMenuScene extends BaseScene {
 					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if (pSceneTouchEvent.isActionDown()) {
 					Debug.i("You touched Back");
-					SceneManager.getInstance().showScene(MainMenuScene.class);
+					SceneManager.getInstance().showScene(SceneTitle.class);
 				}
 				return true;
 			}

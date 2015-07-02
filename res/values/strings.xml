@@ -112,5 +112,25 @@
     <string name="scarf">Foulard</string>
     <string name="vampire_fang">Croc de vampire</string>
     <string name="reapers_sigil">Sceau des Reapers</string>
+    <string name="play">Play</string>
+    <string name="options">Options</string>
+    <string name="extras">Extras</string><string name="main_menu">Main Menu</string>
+    <string name="inventory">Inventory</string>
+    <string name="equip">Equip</string>
+    <string name="weapon">Weapon</string>
+    <string name="accessory">Accessory</string>
+    <string name="loot">Loot</string>
+    <string name="key">Key Item</string>
+    
+    <string name="empty">Empty</string>
+    <string name="remove">Remove</string>
+    <string name="status">Status</string>
+    <string name="courage">Courage</string>
+    <string name="prudence">Prudence</string>
+    <string name="temperance">Temperance</string>
+    <string name="justice">Justice</string>
+    <string name="soul">Soul</string>
+    <string name="exp">Experience</string>
+    <string name="next">Next</string>
 
 </resources>

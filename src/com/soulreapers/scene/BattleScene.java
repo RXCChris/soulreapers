@@ -47,21 +47,21 @@ import android.opengl.GLES20;
 
 import com.soulreapers.R;
 import com.soulreapers.core.AudioManager;
+import com.soulreapers.core.FontManager;
+import com.soulreapers.core.FontManager.FontType;
 import com.soulreapers.core.ResourceManager;
 import com.soulreapers.core.SceneManager;
 import com.soulreapers.misc.DefaultVictory;
 import com.soulreapers.misc.Stat;
 import com.soulreapers.misc.GameConstants;
-import com.soulreapers.misc.Attributes.AttributeType;
+import com.soulreapers.misc.CharacterParameters.AttributeType;
 import com.soulreapers.misc.VictoryListener;
 import com.soulreapers.object.BattleObject;
 import com.soulreapers.object.FieldGrid;
 import com.soulreapers.object.character.BattleCharacter;
-import com.soulreapers.object.character.CharacterCollection;
 import com.soulreapers.object.character.Remnant;
 import com.soulreapers.object.character.RemnantFactory;
 import com.soulreapers.object.character.GameCharacter.CharacterType;
-import com.soulreapers.object.character.RemnantFactory.RemnantType;
 import com.soulreapers.object.character.reaper.Reaper;
 import com.soulreapers.ui.AttributesUI;
 import com.soulreapers.ui.BattleActionUI;
@@ -72,14 +72,14 @@ import com.soulreapers.ui.BattleActionUI;
  * @author dxcloud
  *
  */
-public class BattleScene extends BaseScene {
+public class BattleScene extends UI_Scene {
 	private Sprite mBackground;
 	private FieldGrid mGrid = new FieldGrid();
 	private BattleActionUI mActionUI;
 
 	private static final String STRING_YOUR_TURN = "Your Turn";
 	private static final String STRING_ENEMY_TURN = "Enemy Turn";
-	private static final int FONT_TITLE_ID = ResourceManager.FONT_TITLE_ID;
+//	private static final int FONT_TITLE_ID = ResourceManager.FONT_TITLE_ID;
 	private static final float FADE_OUT_DURATION = 2.0F;
 
 	private VictoryListener mVictoryListener = new DefaultVictory(this);
@@ -106,7 +106,7 @@ public class BattleScene extends BaseScene {
 	}
 
 	private Text mTurnIndication = new Text(0, 0,
-			ResourceManager.getInstance().getFont(FONT_TITLE_ID),
+			FontManager.getInstance().getFont(FontType.FONT_TEXT_MEDIUM),
 			STRING_YOUR_TURN,
 			GameConstants.MAX_CHARACTER_SIZE,
 			new TextOptions(HorizontalAlign.CENTER),
@@ -150,14 +150,13 @@ public class BattleScene extends BaseScene {
 	 */
 	@Override
 	public void onLoadResources() {
-		ResourceManager.getInstance().loadTexture(TEXTURE_BACKGROUND_ID,
-				TEXTURE_BACKGROUND_WIDTH, TEXTURE_BACKGROUND_HEIGHT);
+		ResourceManager.getInstance().loadTexture(TEXTURE_BACKGROUND_ID);
 	}
 
 	// TODO Implements enemy generation algorithm.
 	private void generateEnemy() {
 		// enemy 1
-		BattleObject object = new BattleObject(RemnantFactory.create(RemnantType.CHIROPTERA),
+		BattleObject object = new BattleObject(RemnantFactory.create(0),
 				R.string.ic_e01, 4, 2, false, this);
 		mBattleObjectList.add(object);
 		mGrid.putIntoCell(object.getCurrentIndexX(), object.getCurrentIndexY());
@@ -165,7 +164,7 @@ public class BattleScene extends BaseScene {
 		registerTouchArea(object);
 
 		// enemy 2
-		BattleObject object2 = new BattleObject(RemnantFactory.create(RemnantType.CHIROPTERA),
+		BattleObject object2 = new BattleObject(RemnantFactory.create(0),
 				R.string.ic_e01, 4, 6, false, this);
 		mBattleObjectList.add(object2);
 		mGrid.putIntoCell(object2.getCurrentIndexX(), object2.getCurrentIndexY());
@@ -180,7 +179,7 @@ public class BattleScene extends BaseScene {
 
 
 	private void generateAlly() {
-		BattleObject object = new BattleObject(new Reaper("Dante", R.string.pc_01, R.string.ic_01),
+		BattleObject object = new BattleObject(new Reaper(1,"Dante", R.string.pc_01, R.string.ic_01),
 				R.string.ic_01, 3, 5, true, this);
 		mBattleObjectList.add(object);
 		mGrid.putIntoCell(object.getCurrentIndexX(), object.getCurrentIndexY());
@@ -216,7 +215,7 @@ public class BattleScene extends BaseScene {
 //				object.dispose();
 				removeBattleObject(object);
 			} else {
-				object.getCharacter().getAttributes().increaseCurrent(AttributeType.JUSTICE, 1);
+				object.getCharacter().getParameters().increaseCurrent(AttributeType.JUSTICE, 1);
 			}
 		}
 
@@ -258,10 +257,10 @@ public class BattleScene extends BaseScene {
 	}
 
 	public void showCharacterArt(BattleObject pObject) {
-		for (BattleObject object : mBattleObjectList) {
-			object.getCharacter().setVisible(false);
-		}
-		pObject.getCharacter().setVisible(true);
+//		for (BattleObject object : mBattleObjectList) {
+//			object.getCharacter().setVisible(false);
+//		}
+//		pObject.getCharacter().setVisible(true);
 	}
 
 //	private int initD = 99;

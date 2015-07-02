@@ -12,9 +12,10 @@ import org.andengine.util.HorizontalAlign;
 
 import com.soulreapers.R;
 import com.soulreapers.core.AudioManager;
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
+import com.soulreapers.core.FontManager.FontType;
 import com.soulreapers.misc.GameConstants;
-import com.soulreapers.object.character.CharacterCollection;
 import com.soulreapers.object.character.reaper.Reaper;
 import com.soulreapers.object.item.GameDataDictionary;
 import com.soulreapers.object.item.Inventory;
@@ -31,9 +32,9 @@ import com.soulreapers.ui.menu.StatusMenuUI;
 import com.soulreapers.ui.menu.equip.MenuEquip;
 import com.soulreapers.util.SRButton;
 
-public class GameMenuScene extends BaseScene {
+public class GameMenuScene extends UI_Scene {
 	private static final int TEXTURE_BACKGROUND_ID = R.string.bg_04;
-	private static final int FONT_TITLE_ID = ResourceManager.FONT_TITLE_ID;
+//	private static final int FONT_TITLE_ID = ResourceManager.FONT_TITLE_ID;
 	private static final int MUSIC_ID = R.string.ms_02;
 	private static final int MENU_TITLE_OFFSET_X = 50;
 	private static final int MENU_TITLE_OFFSET_Y = 20;
@@ -49,7 +50,7 @@ public class GameMenuScene extends BaseScene {
 
 	private Text mTextMenuTitle = new Text(MENU_TITLE_OFFSET_X,
 			MENU_TITLE_OFFSET_Y,
-			ResourceManager.getInstance().getFont(FONT_TITLE_ID),
+			FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 			GameConstants.STRING.MAIN,
 			GameConstants.MAX_CHARACTER_SIZE,
 			new TextOptions(HorizontalAlign.LEFT),
@@ -121,7 +122,7 @@ public class GameMenuScene extends BaseScene {
 
 	@Override
 	public void onLoadResources() {
-		ResourceManager.getInstance().loadTexture(TEXTURE_BACKGROUND_ID, 800, 800);
+		ResourceManager.getInstance().loadTexture(TEXTURE_BACKGROUND_ID);
 	}
 
 	@Override
@@ -135,30 +136,30 @@ public class GameMenuScene extends BaseScene {
 				new LoopEntityModifier(new MoveYModifier(10, -228, 0)));
 
 		//------------------
-		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.soul_ruby), 1);
-		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.soul_sapphire), 1);
-		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.soul_emerald), 1);
-		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.soul_topaz), 1);
-		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.soul_quartz), 10);
-
-		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.reapers_scythe), 1);
-		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.scarf), 1);
-		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.reapers_sigil), 1);
-		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.vampire_fang), 1);
-		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.reapers_scythe), 2);
-		//------------------
-		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem("[ST] Frappe éclaire"), 3);
-		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem("[ST] Coup double"), 1);
-		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem("[SU] Frappe ascendante"), 3);
-		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem("[SD] Plongée aérienne"), 2);
-		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem("[SL] Frappe horizontale"), 2);
-		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem("[SR] Vrille aérienne"), 1);
-
-		//------------------
-		mReapers.add(new Reaper("Dante", R.string.pc_01, R.string.ic_01));
-		mReapers.add(new Reaper("Beatrix", R.string.pc_01, R.string.ic_01));
-		mReapers.add(new Reaper("Vergil", R.string.pc_01, R.string.ic_01));
-		//------------------
+//		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.soul_ruby), 1);
+//		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.soul_sapphire), 1);
+//		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.soul_emerald), 1);
+//		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.soul_topaz), 1);
+//		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.soul_quartz), 10);
+//
+//		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.reapers_scythe), 1);
+//		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.scarf), 1);
+//		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.reapers_sigil), 1);
+//		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.vampire_fang), 1);
+//		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem(R.string.reapers_scythe), 2);
+//		//------------------
+//		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem("[ST] Frappe éclaire"), 3);
+//		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem("[ST] Coup double"), 1);
+//		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem("[SU] Frappe ascendante"), 3);
+//		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem("[SD] Plongée aérienne"), 2);
+//		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem("[SL] Frappe horizontale"), 2);
+//		Inventory.getInstance().add(GameDataDictionary.getInstance().getItem("[SR] Vrille aérienne"), 1);
+//
+//		//------------------
+//		mReapers.add(new Reaper("Dante", R.string.pc_01, R.string.ic_01));
+//		mReapers.add(new Reaper("Beatrix", R.string.pc_01, R.string.ic_01));
+//		mReapers.add(new Reaper("Vergil", R.string.pc_01, R.string.ic_01));
+//		//------------------
 
 
 		this.attachChild(mBackgroundSprite);

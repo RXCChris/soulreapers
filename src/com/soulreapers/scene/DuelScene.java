@@ -53,9 +53,11 @@ import org.andengine.util.modifier.IModifier;
 import android.opengl.GLES20;
 
 import com.soulreapers.R;
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
 import com.soulreapers.core.SceneManager;
-import com.soulreapers.misc.Attributes.AttributeType;
+import com.soulreapers.core.FontManager.FontType;
+import com.soulreapers.misc.CharacterParameters.AttributeType;
 import com.soulreapers.misc.GameConstants;
 import com.soulreapers.misc.MoveYFadeOutText;
 import com.soulreapers.misc.OverkillListener;
@@ -74,7 +76,7 @@ public class DuelScene extends Scene implements IOnSceneTouchListener {
 	private static final float RATE_MIN = 30;
 	private static final float RATE_MAX = 60;
 	private static final int PARTICLES_MAX = 200;
-	private static final int FONT_ID = ResourceManager.FONT_TEXT_ID;
+//	private static final int FONT_ID = ResourceManager.FONT_TEXT_ID;
 	private static final int TEXTURE_PARTICLE_ID     = R.string.bo_particle_2;
 	private static final int TEXTURE_PARTICLE_WIDTH  = 32;
 	private static final int TEXTURE_PARTICLE_HEIGHT = 32;
@@ -104,8 +106,8 @@ public class DuelScene extends Scene implements IOnSceneTouchListener {
 	private static final String STRING_JUSTICE_FORMAT = "Justice : % 9d";
 	private static final String STRING_COMBO_FORMAT = "Combo : % 9d";
 
-	private Text mTextJustice = new Text(20, 400, ResourceManager.getInstance().getFont(FONT_ID), String.format(STRING_JUSTICE_FORMAT, 0), ResourceManager.getInstance().getVertexBufferObjectManager());
-	private Text mTextCombo = new Text(20, 360, ResourceManager.getInstance().getFont(FONT_ID), String.format(STRING_COMBO_FORMAT, 0), ResourceManager.getInstance().getVertexBufferObjectManager());
+	private Text mTextJustice = new Text(20, 400, FontManager.getInstance().getFont(FontType.FONT_TEXT_MEDIUM), String.format(STRING_JUSTICE_FORMAT, 0), ResourceManager.getInstance().getVertexBufferObjectManager());
+	private Text mTextCombo = new Text(20, 360, FontManager.getInstance().getFont(FontType.FONT_TEXT_MEDIUM), String.format(STRING_COMBO_FORMAT, 0), ResourceManager.getInstance().getVertexBufferObjectManager());
 //			ResourceManager.getInstance().getFont(FONT_ID),
 //			STRING_SOUL,
 //			ResourceManager.getInstance().getVertexBufferObjectManager());
@@ -121,14 +123,14 @@ public class DuelScene extends Scene implements IOnSceneTouchListener {
 		mEnemy = pEnemy;
 
 //		mPlayer.detachSelf();
-		mEnemy.detachSelf();
-		mSoulGauge.update(mEnemy.getAttributes().getCurrent(AttributeType.SOUL),
-				mEnemy.getAttributes().getTotal(AttributeType.SOUL));
-		mTextSoul = new Text(GAUGE_X, GAUGE_Y - FONT_ID * 0.75F,
-				ResourceManager.getInstance().getFont(FONT_ID),
+//		mEnemy.detachSelf();
+		mSoulGauge.update(mEnemy.getParameters().getCurrent(AttributeType.SOUL),
+				mEnemy.getParameters().getTotal(AttributeType.SOUL));
+		mTextSoul = new Text(GAUGE_X, GAUGE_Y - FontType.FONT_TEXT_MEDIUM.size() * 0.75F,
+				FontManager.getInstance().getFont(FontType.FONT_TEXT_MEDIUM),
 				mEnemy.getName(),
 				ResourceManager.getInstance().getVertexBufferObjectManager());
-		mTextJustice.setText(String.format(STRING_JUSTICE_FORMAT, mPlayer.getAttributes().getCurrent(AttributeType.JUSTICE)));
+		mTextJustice.setText(String.format(STRING_JUSTICE_FORMAT, mPlayer.getParameters().getCurrent(AttributeType.JUSTICE)));
 		create();
 
 		this.attachChild(mOverkillMode);
@@ -164,14 +166,14 @@ public class DuelScene extends Scene implements IOnSceneTouchListener {
 	public void back() {
 		Debug.i(">>call duelscene back");
 		super.back();
-		mEnemy.setPosition(0, 0);
+//		mEnemy.setPosition(0, 0);
 //		mPlayer.detachSelf();
-		mEnemy.detachSelf();
+//		mEnemy.detachSelf();
 //		mPlayer.setVisible(false);
-		mEnemy.setVisible(false);
+//		mEnemy.setVisible(false);
 
 		DuelScene.this.detachChildren();
-		mBattleScene.getChildByIndex(0).attachChild(mEnemy);
+//		mBattleScene.getChildByIndex(0).attachChild(mEnemy);
 //		mBattleScene.getChildByIndex(0).attachChild(mPlayer);
 		mBattleScene.endTurn();
 	}
@@ -200,11 +202,11 @@ public class DuelScene extends Scene implements IOnSceneTouchListener {
 		};
 
 //		mPlayer.setVisible(true);
-		mEnemy.setVisible(true);
-		mEnemy.setPosition(GameConstants.X_BATTLE_FIELD_PADDING, 0);
+//		mEnemy.setVisible(true);
+//		mEnemy.setPosition(GameConstants.X_BATTLE_FIELD_PADDING, 0);
 
 //		this.attachChild(mPlayer);
-		this.attachChild(mEnemy);
+//		this.attachChild(mEnemy);
 		this.attachChild(mEndDuelText);
 
 		createParticleSystem();
@@ -239,7 +241,7 @@ public class DuelScene extends Scene implements IOnSceneTouchListener {
 		mParticleEmitter = new CircleParticleEmitter(0.0F, 0.0F, 50.0F);
 		mParticleSystem = new SpriteParticleSystem(mParticleEmitter,
 				RATE_MIN, RATE_MAX, PARTICLES_MAX,
-				ResourceManager.getInstance().loadTexture(TEXTURE_PARTICLE_ID, TEXTURE_PARTICLE_WIDTH, TEXTURE_PARTICLE_HEIGHT),
+				ResourceManager.getInstance().getTextureRegion(TEXTURE_PARTICLE_ID),
 				ResourceManager.getInstance().getVertexBufferObjectManager());
 
 		mParticleSystem.addParticleInitializer(new AlphaParticleInitializer<Sprite>(0));
@@ -295,29 +297,29 @@ public class DuelScene extends Scene implements IOnSceneTouchListener {
 
 	private void executeAction(SkillGesture pGesture) {
 		Debug.d("executing attack : " + pGesture.toString());
-		SkillAttack skill = mPlayer.getOffensiveSkill(pGesture);
-		if (skill != null) {
-			if (mOverkillMode.isOverkillModeEnabled()) {
-				final int damage = skill.getOverkillDamage();
-				mOverkillMode.addDamage(damage);
-				++mNumCombo;
-				this.attachChild(new MoveYFadeOutText(400, 200, 100,
-						skill.getName() + "\n-" + damage, 2));
-			} else if (mPlayer.executeOffensiveSkill(pGesture, mPlayer, mEnemy)) {
-				final int damage = skill.getDamage();
-				mTotalRegularDamage += damage;
-				++mNumCombo;
-				mSoulGauge.update(mEnemy.getAttributes().getCurrent(AttributeType.SOUL),
-						mEnemy.getAttributes().getTotal(AttributeType.SOUL));
-				mTextJustice.setText(String.format(STRING_JUSTICE_FORMAT, mPlayer.getAttributes().getCurrent(AttributeType.JUSTICE)));
-				mTextCombo.setText(String.format(STRING_COMBO_FORMAT, mNumCombo));
-				this.attachChild(new MoveYFadeOutText(400, 200, 100,
-						skill.getName() + "\n-" + damage, 2));
-				if (mEnemy.isDead()) {
-					startOverkillMode();
-				}
-			}
-		}
+//		SkillAttack skill = mPlayer.getOffensiveSkill(pGesture);
+//		if (skill != null) {
+//			if (mOverkillMode.isOverkillModeEnabled()) {
+//				final int damage = skill.getOverkillDamage();
+//				mOverkillMode.addDamage(damage);
+//				++mNumCombo;
+//				this.attachChild(new MoveYFadeOutText(400, 200, 100,
+//						skill.getName() + "\n-" + damage, 2));
+//			} else if (mPlayer.executeOffensiveSkill(pGesture, mPlayer, mEnemy)) {
+//				final int damage = skill.getDamage();
+//				mTotalRegularDamage += damage;
+//				++mNumCombo;
+//				mSoulGauge.update(mEnemy.getAttributes().getCurrent(AttributeType.SOUL),
+//						mEnemy.getAttributes().getTotal(AttributeType.SOUL));
+//				mTextJustice.setText(String.format(STRING_JUSTICE_FORMAT, mPlayer.getAttributes().getCurrent(AttributeType.JUSTICE)));
+//				mTextCombo.setText(String.format(STRING_COMBO_FORMAT, mNumCombo));
+//				this.attachChild(new MoveYFadeOutText(400, 200, 100,
+//						skill.getName() + "\n-" + damage, 2));
+//				if (mEnemy.isDead()) {
+//					startOverkillMode();
+//				}
+//			}
+//		}
 	}
 
 	private DelayModifier mDelayModifier = new DelayModifier(1, new IEntityModifierListener() {
@@ -335,10 +337,10 @@ public class DuelScene extends Scene implements IOnSceneTouchListener {
 		public void onModifierFinished(IModifier<IEntity> pModifier,
 				IEntity pItem) {
 			final int base = 100;
-			final int remnantSoul = mEnemy.getAttributes().getTotal(AttributeType.SOUL);
+			final int remnantSoul = mEnemy.getParameters().getTotal(AttributeType.SOUL);
 			final int bonus = (mEnemy.isDead() ? base : 0);
 			final int total = ResultScene.computeTotalExpGained(base, remnantSoul, mTotalRegularDamage, mOverkillMode.mTotalDamage, mNumCombo, bonus);
-			mPlayer.getAttributes().increaseCurrent(AttributeType.EXPERIENCE, total);
+			mPlayer.getParameters().increaseCurrent(AttributeType.EXPERIENCE, total);
 
 			DuelScene.this.setChildScene(new ResultScene(base,
 					ResultScene.computeComboMultiplicator(mNumCombo),
@@ -376,13 +378,13 @@ public class DuelScene extends Scene implements IOnSceneTouchListener {
 
 		private Gauge mTimerGauge = new Gauge(GAUGE_X, GAUGE_Y + GAUGE_PADDING_Y, GAUGE_WIDTH, GAUGE_HEIGHT, Color.BLUE);
 
-		private Text mTextOverkill = new Text(GAUGE_X, GAUGE_Y + GAUGE_PADDING_Y - FONT_ID / 2,
-				ResourceManager.getInstance().getFont(FONT_ID),
+		private Text mTextOverkill = new Text(GAUGE_X, GAUGE_Y + GAUGE_PADDING_Y - FontType.FONT_TEXT_MEDIUM.size() / 2,
+				FontManager.getInstance().getFont(FontType.FONT_TEXT_MEDIUM),
 				STRING_OVERKILL,
 				ResourceManager.getInstance().getVertexBufferObjectManager());
 
 		private Text mTextDamage = new Text(600, 400,
-				ResourceManager.getInstance().getFont(FONT_ID),
+				FontManager.getInstance().getFont(FontType.FONT_TEXT_MEDIUM),
 				STRING_TOTAL_DAMAGE + 0,
 				MAX_DAMAGE_LENGTH,
 				ResourceManager.getInstance().getVertexBufferObjectManager());
@@ -394,7 +396,7 @@ public class DuelScene extends Scene implements IOnSceneTouchListener {
 		public void addDamage(int pDamage) {
 			mTotalDamage += pDamage;
 			mSoulGauge.update(pDamage,
-					mEnemy.getAttributes().getTotal(AttributeType.SOUL));		
+					mEnemy.getParameters().getTotal(AttributeType.SOUL));		
 			mTextDamage.setText(STRING_TOTAL_DAMAGE + mTotalDamage);
 		}
 
@@ -461,10 +463,10 @@ public class DuelScene extends Scene implements IOnSceneTouchListener {
 			mEnabled = true;
 			mSoulGauge.setFilledColor(Color.YELLOW);
 
-			Debug.d("justice=" + mPlayer.getAttributes().getCurrent(AttributeType.JUSTICE));
-			mOverkillMode.mTotalTime = (float) mPlayer.getAttributes().getCurrent(AttributeType.JUSTICE) * OverkillMode.OVERKILL_BASE_TIME;
+			Debug.d("justice=" + mPlayer.getParameters().getCurrent(AttributeType.JUSTICE));
+			mOverkillMode.mTotalTime = (float) mPlayer.getParameters().getCurrent(AttributeType.JUSTICE) * OverkillMode.OVERKILL_BASE_TIME;
 			Debug.d("total time=" + mTotalTime);
-			mPlayer.getAttributes().setCurrent(AttributeType.JUSTICE, 0);
+			mPlayer.getParameters().setCurrent(AttributeType.JUSTICE, 0);
 
 			OverkillMode.this.setVisible(true);
 			OverkillMode.this.registerUpdateHandler(mOverkillUpdateHandler);

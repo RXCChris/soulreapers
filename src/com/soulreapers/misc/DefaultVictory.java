@@ -12,6 +12,8 @@ import org.andengine.entity.text.TextOptions;
 import org.andengine.util.HorizontalAlign;
 import org.andengine.util.debug.Debug;
 
+import com.soulreapers.core.FontManager;
+import com.soulreapers.core.FontManager.FontType;
 import com.soulreapers.core.ResourceManager;
 import com.soulreapers.core.SceneManager;
 import com.soulreapers.object.BattleObject;
@@ -26,7 +28,7 @@ import com.soulreapers.scene.SceneNavigator;
 public class DefaultVictory implements VictoryListener {
 
 	private BattleScene mBattleScene;
-	private static final int FONT_ID = ResourceManager.FONT_TITLE_ID;
+//	private static final int FONT_ID = ResourceManager.FONT_TITLE_ID;
 	private static final String STRING_VICTORY   = "Victoire";
 	private static final String STRING_GAME_OVER = "Fin de la Partie";
 	private static final int DELAY_DURATION = 3;
@@ -34,7 +36,7 @@ public class DefaultVictory implements VictoryListener {
 
 	private Text mTextEndBattle = new Text(GameConstants.CAMERA_WIDTH / 2,
 			GameConstants.CAMERA_HEIGHT / 2,
-			ResourceManager.getInstance().getFont(FONT_ID),
+			FontManager.getInstance().getFont(FontType.FONT_TITLE_BIG),
 			STRING_GAME_OVER,
 //			MAX_CHAR_SIZE,
 			new TextOptions(HorizontalAlign.CENTER),

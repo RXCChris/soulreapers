@@ -7,7 +7,9 @@ import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.util.HorizontalAlign;
 
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
+import com.soulreapers.core.FontManager.FontType;
 import com.soulreapers.skill.Skill;
 
 
@@ -15,6 +17,7 @@ import com.soulreapers.skill.Skill;
  * @author chris
  *
  */
+@Deprecated
 public class SlotSkill extends Slot<Skill> {
 	private static final float RECTANGLE_OFFSET_X = 10;
 	private static final float RECTANGLE_OFFSET_Y = 48;
@@ -32,13 +35,13 @@ public class SlotSkill extends Slot<Skill> {
 		super(RECTANGLE_OFFSET_X, RECTANGLE_OFFSET_Y, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, pSkill);
 
 		mTextName = new Text(TEXT_PADDING_X, 0,
-				ResourceManager.getInstance().getFont(FONT_TEXT_ID),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 				pSkill.getName(),
 				20,
 				ResourceManager.getInstance().getVertexBufferObjectManager());
 
 		mTextCost = new Text(COST_PADDING_X, 0,
-				ResourceManager.getInstance().getFont(FONT_TEXT_ID),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 				String.format("%02d", pSkill.getCost()),
 				2,
 				new TextOptions(HorizontalAlign.RIGHT),

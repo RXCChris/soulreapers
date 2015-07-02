@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import org.andengine.util.debug.Debug;
 
+import com.soulreapers.core.DataManager;
 import com.soulreapers.misc.GameConstants;
 import com.soulreapers.object.item.CombatItem;
 import com.soulreapers.object.item.Inventory;
@@ -28,10 +29,8 @@ public class EquipItem extends EquipOption<CombatItem> {
 
 	@Override
 	protected void onCreateEquippableList() {
-//		final ArrayList<ItemBase> inventory =
-//				mMenuEquip.getMenuScene().getInventory().getItemList(ItemType.COMBAT);
-		final ArrayList<ItemBase> inventory = Inventory.getInstance().getItemList(ItemType.COMBAT);
-//				mMenuEquip.getMenuScene().getInventory().getItemList(ItemType.COMBAT);
+//		final ArrayList<ItemBase> inventory = DataManager.getInstance().getInventory().getItemList(ItemType.COMBAT);
+
 		mEquippableList = new SlotItemList<CombatItem>(mMenuEquip.getLayout()) {
 			@Override
 			protected void onSlotSelected() {
@@ -39,10 +38,10 @@ public class EquipItem extends EquipOption<CombatItem> {
 				int index = mEquippedList.getSelectedSlot().getIndex();
 
 				if (this.getSelectedSlot().getIndex() == 0) {
-					EquipItem.this.mReaper.getEquipment().removeItem(index);
+					EquipItem.this.mReaper.getEquipment().removeItem(mReaper, index);
 				} else {
 					CombatItem newItem = this.getSelectedSlot().getElement();
-					if (!EquipItem.this.mReaper.getEquipment().equipCombatItem(index, newItem)) {
+					if (!EquipItem.this.mReaper.getEquipment().equipCombatItem(mReaper, index, newItem)) {
 						return;
 //						EquipItem.this.onSetReaper();
 //						EquipItem.this.setEquippableListVisible(false);
@@ -70,10 +69,10 @@ public class EquipItem extends EquipOption<CombatItem> {
 			}
 		};
 
-		mEquippableList.addSlot(CombatItem.REMOVE);
-		for (int i = 0; i < inventory.size(); ++i) {
-			mEquippableList.addSlot((CombatItem) inventory.get(i));
-		}
+		mEquippableList.addSlot(null);
+//		for (int i = 0; i < inventory.size(); ++i) {
+//			mEquippableList.addSlot((CombatItem) inventory.get(i));
+//		}
 		mMenuEquip.getLayout().attachChild(mEquippableList);
 	}
 
@@ -90,7 +89,7 @@ public class EquipItem extends EquipOption<CombatItem> {
 		};
 
 		for (int i = 0; i < GameConstants.REAPER.COMBAT_ITEM_CAPACITY; ++i) {
-			list.addSlot(CombatItem.EMPTY);
+			list.addSlot(null);
 		}
 		list.setQuantityVisible(false);
 		mEquippedList = list;

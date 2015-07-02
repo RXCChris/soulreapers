@@ -30,6 +30,7 @@ import com.soulreapers.misc.GameConstants;
  * @author dxcloud
  *
  */
+@Deprecated
 public class FieldGrid extends Sprite {
 	private boolean[][] mGridCells = new boolean[GameConstants.BATTLE_CELLS_PER_ROW]
 			[GameConstants.BATTLE_CELLS_PER_COLUMN];
@@ -38,8 +39,7 @@ public class FieldGrid extends Sprite {
 
 	public FieldGrid() {
 		super(GameConstants.X_BATTLE_FIELD_PADDING, GameConstants.Y_BATTLE_FIELD_PADDING,
-				ResourceManager.getInstance().getTextureRegion(R.string.bg_grid,
-						FIELD_WIDTH, FIELD_HEIGHT),
+				ResourceManager.getInstance().getTextureRegion(R.string.bg_grid),
 				ResourceManager.getInstance().getVertexBufferObjectManager());
 		resetAll();
 	}

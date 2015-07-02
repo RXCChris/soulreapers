@@ -18,22 +18,25 @@ import org.andengine.util.debug.Debug;
 
 import com.soulreapers.R;
 import com.soulreapers.core.AudioManager;
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
 import com.soulreapers.core.SceneManager;
+import com.soulreapers.core.FontManager.FontType;
 import com.soulreapers.misc.GameConstants;
 
 /**
  * @author chris
  *
  */
-public class ExtrasMenuScene extends BaseScene {
+@Deprecated
+public class ExtrasMenuScene extends UI_Scene {
 	private ITextureRegion mBackgroundTextureRegion;
 	private BitmapTextureAtlas mBackgroundTextureAtlas;
 	private Sprite mBackgroundSprite;
 
 	private HashMap<Integer, Text> mOptionsTextMap = new HashMap<Integer, Text>();
 	private HashMap<Integer, Text> mPlaylistTextMap = new HashMap<Integer, Text>();
-	private static final int FONT_ID = ResourceManager.FONT_OPTION_ID;
+//	private static final int FONT_ID = ResourceManager.FONT_OPTION_ID;
 
 	/* (non-Javadoc)
 	 * @see com.soulreapers.scene.BaseScene#onLoadResources()
@@ -45,7 +48,7 @@ public class ExtrasMenuScene extends BaseScene {
 				GameConstants.CAMERA_WIDTH, GameConstants.CAMERA_HEIGHT,
 				TextureOptions.BILINEAR);
 		mBackgroundTextureRegion = ResourceManager.getInstance()
-				.getTextureRegion(mBackgroundTextureAtlas, R.string.bg_extra);
+				.getTextureRegion(R.string.bg_extra);
 		mBackgroundTextureAtlas.load();
 	}
 
@@ -63,7 +66,7 @@ public class ExtrasMenuScene extends BaseScene {
 		mOptionsTextMap.put(key,
 				new Text(GameConstants.X_OPTION_TEXT_PADDING,
 						GameConstants.Y_OPTION_TEXT_PADDING,
-						ResourceManager.getInstance().getFont(FONT_ID),
+						FontManager.getInstance().getFont(FontType.FONT_TEXT_MEDIUM),
 						ResourceManager.getInstance().getResourceString(key),
 						ResourceManager.getInstance().getVertexBufferObjectManager()) {
 			@Override
@@ -81,7 +84,7 @@ public class ExtrasMenuScene extends BaseScene {
 		mOptionsTextMap.put(key,
 				new Text(GameConstants.X_OPTION_TEXT_PADDING,
 						GameConstants.Y_OPTION_TEXT_PADDING * 2,
-						ResourceManager.getInstance().getFont(FONT_ID),
+						FontManager.getInstance().getFont(FontType.FONT_TEXT_MEDIUM),
 						ResourceManager.getInstance().getResourceString(key),
 						ResourceManager.getInstance().getVertexBufferObjectManager()) {
 			@Override
@@ -100,7 +103,7 @@ public class ExtrasMenuScene extends BaseScene {
 		mOptionsTextMap.put(key,
 				new Text(GameConstants.X_OPTION_TEXT_PADDING,
 						GameConstants.Y_OPTION_TEXT_PADDING * 8,
-						ResourceManager.getInstance().getFont(FONT_ID),
+						FontManager.getInstance().getFont(FontType.FONT_TEXT_MEDIUM),
 						ResourceManager.getInstance().getResourceString(key),
 						ResourceManager.getInstance().getVertexBufferObjectManager()) {
 			@Override
@@ -108,7 +111,7 @@ public class ExtrasMenuScene extends BaseScene {
 					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if (pSceneTouchEvent.isActionDown()) {
 					Debug.i("You touched Back");
-					SceneManager.getInstance().showScene(MainMenuScene.class);
+					SceneManager.getInstance().showScene(SceneTitle.class);
 				}
 				return true;
 			}
@@ -189,7 +192,7 @@ public class ExtrasMenuScene extends BaseScene {
 		mPlaylistTextMap.put(pResId,
 				new Text(GameConstants.Y_OPTION_TEXT_PADDING,
 						GameConstants.Y_OPTION_TEXT_PADDING * (pNumTrack - 1),
-						ResourceManager.getInstance().getFont(FONT_ID),
+						FontManager.getInstance().getFont(FontType.FONT_TEXT_MEDIUM),
 						ResourceManager.getInstance().getResourceString(pTrackNameId),
 						ResourceManager.getInstance().getVertexBufferObjectManager()) {
 			@Override

@@ -12,7 +12,9 @@ import org.andengine.entity.text.TextOptions;
 import org.andengine.util.HorizontalAlign;
 import org.andengine.util.debug.Debug;
 
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
+import com.soulreapers.core.FontManager.FontType;
 import com.soulreapers.misc.GameConstants;
 import com.soulreapers.util.SRButton;
 
@@ -29,7 +31,7 @@ import com.soulreapers.util.SRButton;
 // Total:      64    -> = total rounded down
 public class ResultScene extends Scene {
 	private static final String STRING_END = "Fin";
-	private static final int FONT_ID = ResourceManager.FONT_TEXT_ID;
+//	private static final int FONT_ID = ResourceManager.FONT_TEXT_ID;
 
 	private static final String STRING_BASE = "EXP";
 	private static final String STRING_COMBO = "Combo";
@@ -179,12 +181,12 @@ public class ResultScene extends Scene {
 				value = String.format("x%.1f", pValue);
 			}
 			mType = new Text(pX, pY,
-					ResourceManager.getInstance().getFont(FONT_ID),
+					FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 					pType.toString(),
 					ResourceManager.getInstance().getVertexBufferObjectManager());
 
 			mValue = new Text(0, pY,
-					ResourceManager.getInstance().getFont(FONT_ID),
+					FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 					value,
 					new TextOptions(HorizontalAlign.RIGHT),
 					ResourceManager.getInstance().getVertexBufferObjectManager());

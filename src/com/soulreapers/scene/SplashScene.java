@@ -21,16 +21,14 @@ package com.soulreapers.scene;
 
 import org.andengine.entity.modifier.FadeInModifier;
 import org.andengine.entity.scene.background.Background;
-import org.andengine.entity.text.Text;
-import org.andengine.entity.text.TextOptions;
-import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
 
 import android.opengl.GLES20;
 
-import com.soulreapers.R;
-import com.soulreapers.core.ResourceManager;
-import com.soulreapers.misc.GameConstants;
+import com.soulreapers.core.FontManager;
+import com.soulreapers.core.FontManager.FontType;
+import com.soulreapers.ui.UI_Label;
+import com.soulreapers.ui.UI_Panel;
 
 /**
  * This <code>SplashScene</code> consists in showing a fake studio name.
@@ -39,45 +37,53 @@ import com.soulreapers.misc.GameConstants;
  * @version 0.1 (alpha)
  * @author dxcloud
  */
-public class SplashScene extends BaseScene {
+public class SplashScene extends UI_Scene {
 	/** Required duration to display the name of the fake studio */
 	private static final float FADE_IN_DURATION = 5.0F;
-	private static final int FONT_ID = ResourceManager.FONT_TITLE_ID;
-	private static final int STUDIO_ID = R.string.mg_studio;
 
 	/** Name of the fake studio to display */
-	private Text mTextStudio = new Text(0, 0,
-			ResourceManager.getInstance().getFont(FONT_ID),
-			ResourceManager.getInstance().getResourceString(STUDIO_ID),
-			new TextOptions(HorizontalAlign.CENTER),
-			ResourceManager.getInstance().getVertexBufferObjectManager());
+	private static final String STRING_DEVELOPER = "Fictive Studio";
+	private static final String STRING_PRESENTS = "Presents";
+
+	private UI_Panel<UI_Label> mPanelLabels = new UI_Panel<UI_Label>();
 
 	/**
-	 * @see com.soulreapers.scene.BaseScene#onLoadResources()
+	 * @see com.soulreapers.scene.UI_Scene#onLoadResources()
 	 */
 	@Override
 	public void onLoadResources() {
-		// Nothing to do
+		FontManager.getInstance().loadFont(FontType.FONT_TITLE_HUGE);
+		FontManager.getInstance().loadFont(FontType.FONT_TEXT_SMALL);
 	}
 
 	/**
-	 * @see com.soulreapers.scene.BaseScene#onCreate()
+	 * @see com.soulreapers.scene.UI_Scene#onCreate()
 	 */
 	@Override
 	public void onCreate() {
-		this.setBackground(new Background(Color.BLACK));
+		this.setBackground(new Background(Color.WHITE));
 
-		mTextStudio.setAlpha(0.0f);
-		mTextStudio.setPosition((GameConstants.CAMERA_WIDTH - mTextStudio.getWidth()) / 2,
-				(GameConstants.CAMERA_HEIGHT - mTextStudio.getHeight()) / 2);
-		mTextStudio.setBlendFunction(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-		mTextStudio.registerEntityModifier(new FadeInModifier(FADE_IN_DURATION));
+		final UI_Label labelDev = new UI_Label(STRING_DEVELOPER, FontType.FONT_TITLE_HUGE);
+		labelDev.setAlpha(0);
+		labelDev.setBlendFunction(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+		labelDev.registerEntityModifier(new FadeInModifier(FADE_IN_DURATION));
 
-		this.attachChild(mTextStudio);
+		final UI_Label labelPresents = new UI_Label(STRING_PRESENTS, FontType.FONT_TEXT_SMALL);
+		labelPresents.setAlpha(0);
+		labelPresents.setBlendFunction(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+		labelPresents.registerEntityModifier(new FadeInModifier(FADE_IN_DURATION));
+
+		mPanelLabels.add(labelDev);
+		mPanelLabels.add(labelPresents);
+
+		final float x = (this.getWidth() - mPanelLabels.getWidth()) / 2;
+		final float y = (this.getHeight() - mPanelLabels.getHeight()) / 2;
+		mPanelLabels.setPosition(x, y);
+		this.attachChild(mPanelLabels);
 	}
 
 	/**
-	 * @see com.soulreapers.scene.BaseScene#onDestroyResources()
+	 * @see com.soulreapers.scene.UI_Scene#onDestroyResources()
 	 */
 	@Override
 	public void onDestroyResources() {
@@ -85,19 +91,16 @@ public class SplashScene extends BaseScene {
 	}
 
 	/**
-	 * @see com.soulreapers.scene.BaseScene#onDestroy()
+	 * @see com.soulreapers.scene.UI_Scene#onDestroy()
 	 */
 	@Override
 	public void onDestroy() {
-		mTextStudio.clearEntityModifiers();
-		mTextStudio.detachSelf();
-		mTextStudio.dispose();
-		this.detachSelf();
-		this.dispose();
+		mPanelLabels.destroy();
+		mPanelLabels = null;
 	}
 
 	/**
-	 * @see com.soulreapers.scene.BaseScene#onPause()
+	 * @see com.soulreapers.scene.UI_Scene#onPause()
 	 */
 	@Override
 	public void onPause() {
@@ -105,10 +108,15 @@ public class SplashScene extends BaseScene {
 	}
 
 	/**
-	 * @see com.soulreapers.scene.BaseScene#onResume()
+	 * @see com.soulreapers.scene.UI_Scene#onResume()
 	 */
 	@Override
 	public void onResume() {
 		// Nothing to do
+	}
+
+	@Override
+	public String toString() {
+		return "SceneSplash";
 	}
 }

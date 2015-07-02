@@ -12,6 +12,7 @@ import com.soulreapers.ui.menu.SubMenuLayout;
  * @author chris
  *
  */
+@Deprecated
 public class SlotReaperList extends SlotList<Reaper, SlotReaper> {
 
 	/**

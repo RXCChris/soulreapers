@@ -27,8 +27,8 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 
 import com.soulreapers.core.ResourceManager;
-import com.soulreapers.misc.Attributes;
-import com.soulreapers.misc.Attributes.AttributeType;
+import com.soulreapers.misc.CharacterParameters;
+import com.soulreapers.misc.CharacterParameters.AttributeType;
 import com.soulreapers.misc.GameConstants;
 import com.soulreapers.object.character.BattleCharacter;
 import com.soulreapers.object.character.GameCharacter.CharacterType;
@@ -58,8 +58,8 @@ public class BattleObject extends Sprite {
 		return mCharacter.getCharacterType();
 	}
 
-	public Attributes getAttributes() {
-		return mCharacter.getAttributes();
+	public CharacterParameters getAttributes() {
+		return mCharacter.getParameters();
 	}
 
 	public BattleObject(BattleCharacter pPlayableCharacter,
@@ -69,11 +69,15 @@ public class BattleObject extends Sprite {
 			int gridIndexY,
 			boolean movable,
 			BattleScene pBattleScene) {
+//		super(gridIndexToCoordX(gridIndexX),
+//				gridIndexToCoordY(gridIndexY),
+//				ResourceManager.getInstance().getTextureRegion(pResId,
+//						GameConstants.BATTLE_CELL_SIZE,
+//						GameConstants.BATTLE_CELL_SIZE),
+//				ResourceManager.getInstance().getVertexBufferObjectManager());
 		super(gridIndexToCoordX(gridIndexX),
 				gridIndexToCoordY(gridIndexY),
-				ResourceManager.getInstance().getTextureRegion(pResId,
-						GameConstants.BATTLE_CELL_SIZE,
-						GameConstants.BATTLE_CELL_SIZE),
+				ResourceManager.getInstance().getTextureRegion(pResId),
 				ResourceManager.getInstance().getVertexBufferObjectManager());
 		mCharacter = pPlayableCharacter;
 //		mCharacterType = pCharacterType;
@@ -81,7 +85,7 @@ public class BattleObject extends Sprite {
 		mGridIndexX = gridIndexX;
 		mGridIndexY = gridIndexY;
 		mBattleScene = pBattleScene;
-		mCharacter.setVisible(false);
+//		mCharacter.setVisible(false);
 	}
 
 //	public void setCharacterStatusVisible(boolean pVisible) {
@@ -249,11 +253,11 @@ public class BattleObject extends Sprite {
 //		this.getParent().attachChild(mCharacter);
 		super.onAttached();
 		createMoveSurface(); // Creates surface here in order to get its parent
-		mBattleScene.attachChild(mCharacter);
+//		mBattleScene.attachChild(mCharacter);
 	}
 
 	private void createMoveSurface() {
-		int move = mCharacter.getAttributes().getCurrent(AttributeType.TEMPERANCE);
+		int move = mCharacter.getParameters().getCurrent(AttributeType.TEMPERANCE);
 		for (int i = 0; i <= move; ++i) {
 			for (int j = 0; j <= (move - i); ++j) {
 				addToMoveSurface(mGridIndexX + i, mGridIndexY + j);
@@ -271,7 +275,7 @@ public class BattleObject extends Sprite {
 	}
 
 	private boolean isWithinMoveSurface(int indexX, int indexY) {
-		int move = mCharacter.getAttributes().getCurrent(AttributeType.TEMPERANCE);
+		int move = mCharacter.getParameters().getCurrent(AttributeType.TEMPERANCE);
 		for (int i = 0; i <= move; ++i) {
 			if (indexX <= (mGridIndexX - i)){
 				if (indexX < mGridIndexX - move) {
@@ -336,7 +340,7 @@ public class BattleObject extends Sprite {
 	@Override
 	public void onDetached() {
 		super.onDetached();
-		mCharacter.detachSelf();
+//		mCharacter.detachSelf();
 		clearMoveSurface();
 	}
 

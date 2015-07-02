@@ -10,13 +10,15 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.util.color.Color;
 
 import com.soulreapers.R;
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
+import com.soulreapers.core.FontManager.FontType;
 
-public class LoadingScene extends BaseScene {
+public class LoadingScene extends UI_Scene {
 
 //	private Font mFont;
 //	private final int FONT_SIZE = 48;
-	private static final int FONT_ID = ResourceManager.FONT_TEXT_ID;
+//	private static final int FONT_ID = ResourceManager.FONT_TEXT_ID;
 
 	@Override
 	public void onLoadResources() {
@@ -31,7 +33,7 @@ public class LoadingScene extends BaseScene {
 	public void onCreate() {
 //		setBackground(new Background(Color.WHITE));
 //		attachChild(new Text(400, 240, mFont, mActivity.getString(R.string.mg_01), mVbom));
-		attachChild(new Text(400, 240, ResourceManager.getInstance().getFont(FONT_ID), ResourceManager.getInstance().getResourceString(R.string.mg_01), ResourceManager.getInstance().getVertexBufferObjectManager()));
+		attachChild(new Text(400, 240, FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL), ResourceManager.getInstance().getResourceString(R.string.mg_01), ResourceManager.getInstance().getVertexBufferObjectManager()));
 	}
 
 	@Override

@@ -30,6 +30,7 @@ public final class GameConstants {
 		public static final Color COLOR_BACKGROUND = new Color(0, 0, 0, 0.9F);
 		public static final Color COLOR_SELECTED = new Color(0.8F, 0.2F, 0.2F, 0.5F);
 		public static final Color COLOR_UNSELECTED = new Color(0.2F, 0.8F, 0.8F, 0.5F);
+		public static final Color COLOR_NORMAL = new Color(0.2F, 0.8F, 0.8F, 0.5F);
 
 		public static final int MENU_OPTION_OFFSET_X = 500;
 		public static final int MENU_OPTION_OFFSET_Y = 50;
@@ -39,6 +40,7 @@ public final class GameConstants {
 
 	public static final class REAPER {
 		public static final int COMBAT_ITEM_CAPACITY = 6;
+		public static final int ACCESSORY_CAPACITY = 2;
 	}
 
 	public static final class STRING {

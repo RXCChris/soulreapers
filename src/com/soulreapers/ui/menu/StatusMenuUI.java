@@ -8,9 +8,9 @@ import java.util.HashMap;
 
 import org.andengine.util.debug.Debug;
 
-import com.soulreapers.misc.Attributes;
+import com.soulreapers.misc.CharacterParameters;
 import com.soulreapers.misc.GameConstants;
-import com.soulreapers.misc.Attributes.AttributeType;
+import com.soulreapers.misc.CharacterParameters.AttributeType;
 import com.soulreapers.object.character.reaper.Reaper;
 import com.soulreapers.scene.GameMenuScene;
 import com.soulreapers.ui.AttributesUI;
@@ -77,7 +77,7 @@ public class StatusMenuUI extends MenuUI {
 		mSlotReaperList = new SlotReaperList(null) {
 			@Override
 			protected void onSlotSelect() {
-				mSlotAttributes.setElement(this.getSelectedSlot().getElement().getAttributes());
+				mSlotAttributes.setElement(this.getSelectedSlot().getElement().getParameters());
 				mSlotAttributes.setVisible(true);
 			}
 			@Override
@@ -94,7 +94,7 @@ public class StatusMenuUI extends MenuUI {
 		StatusMenuUI.this.attachChild(mSlotReaperList);
 		this.setAllReaperSlotVisible(false);
 
-		mSlotAttributes = new SlotAttributes(Attributes.DEFAULT);
+		mSlotAttributes = new SlotAttributes(CharacterParameters.DEFAULT);
 		this.attachChild(mSlotAttributes);
 		mSlotAttributes.setVisible(false);
 	}

@@ -15,16 +15,18 @@ import com.soulreapers.object.item.ItemBase.ItemType;
  * @author chris
  *
  */
+@Deprecated
 public class Inventory {
 	private HashMap<ItemType, ArrayList<ItemBase>> mItemMap = new HashMap<ItemType, ArrayList<ItemBase>>();
+	private HashMap<Integer, ItemBase> mItems = new HashMap<Integer, ItemBase>();
 
-	private static final Inventory INSTANCE = new Inventory();
+//	private static final Inventory INSTANCE = new Inventory();
 
-	public static Inventory getInstance() {
-		return INSTANCE;
-	}
+//	public static Inventory getInstance() {
+//		return INSTANCE;
+//	}
 
-	private Inventory () {
+	public Inventory () {
 		for (ItemType type : ItemType.values()) {
 			mItemMap.put(type, new ArrayList<ItemBase>());
 		}
@@ -34,16 +36,23 @@ public class Inventory {
 		return mItemMap.get(pType);
 	}
 
+	public ItemBase getItem(int pItemID) {
+		if (!mItems.containsKey(pItemID)) {
+			Debug.d("Inventory does not contain item with ID: " + pItemID);
+		}
+		return mItems.get(pItemID);
+	}
+
 	public void add(ItemBase pItem, int pAmount) {
 		ArrayList<ItemBase> list = mItemMap.get(pItem.getItemType());
 		int index = list.indexOf(pItem);
-		Debug.d("Inventory add >> [type:" + pItem.getItemType() + ",amount:" + pAmount + "]");
+		Debug.d("Inventory add >> [type:" + pItem.getItemType() + ", amount:" + pAmount + "]");
 		if (index > -1) {
 			Debug.d("Inventory item increased");
-			list.get(index).increase(this, pAmount);
+			list.get(index).increaseQuantity(pAmount);
 		} else {
 			Debug.d("Inventory new added");
-			pItem.setQuantity(this, pAmount);
+			pItem.increaseQuantity(0);
 			list.add(pItem);
 			Collections.sort(list);
 		}
@@ -55,7 +64,7 @@ public class Inventory {
 		int index = list.indexOf(pItem);
 		if (index > -1) {
 			ItemBase item = list.get(index);
-			item.decrease(this, pAmount);
+			item.decreaseQuantity(pAmount);
 		}
 	}
 

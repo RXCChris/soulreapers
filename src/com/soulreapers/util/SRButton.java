@@ -9,12 +9,15 @@ import org.andengine.entity.text.TextOptions;
 import org.andengine.util.HorizontalAlign;
 
 import com.soulreapers.R;
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
+import com.soulreapers.core.FontManager.FontType;
 
 /**
  * @author chris
  *
  */
+@Deprecated
 public class SRButton extends ButtonSprite {
 	public static final int DEFAULT_BUTTON_WIDTH = 280;
 	public static final int DEFAULT_BUTTON_HEIGHT = 50;
@@ -25,7 +28,7 @@ public class SRButton extends ButtonSprite {
 	private static final int BUTTON_TEXTURE_WIDTH  = 114;
 	private static final int BUTTON_TEXTURE_HEIGHT = 114;
 
-	private static final int FONT_ID = ResourceManager.FONT_OPTION_ID;
+//	private static final int FONT_ID = ResourceManager.FONT_OPTION_ID;
 	private static final int MAX_CHAR_LENGHT = 16;
 
 	private Text mButtonText;
@@ -47,15 +50,10 @@ public class SRButton extends ButtonSprite {
 
 	public SRButton(int pX, int pY, int pWidth, int pHeight, String pText, TextAlignment pAlignment) {
 		super(pX, pY,
-				ResourceManager.getInstance().loadTexture(BUTTON_TEXTURE_ID,
-						BUTTON_TEXTURE_WIDTH, BUTTON_TEXTURE_HEIGHT),
-				ResourceManager.getInstance().loadTexture(BUTTON_TEXTURE_ID,
-						BUTTON_TEXTURE_WIDTH, BUTTON_TEXTURE_HEIGHT),
-				ResourceManager.getInstance().loadTexture(BUTTON_TEXTURE_ID,
-						BUTTON_TEXTURE_WIDTH, BUTTON_TEXTURE_HEIGHT),
+				ResourceManager.getInstance().getTextureRegion(BUTTON_TEXTURE_ID),
 				ResourceManager.getInstance().getVertexBufferObjectManager());
 		mButtonText = new Text(0, 0,
-				ResourceManager.getInstance().getFont(FONT_ID),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 				pText, MAX_CHAR_LENGHT,
 				new TextOptions(HorizontalAlign.LEFT),
 				ResourceManager.getInstance().getVertexBufferObjectManager());

@@ -115,11 +115,11 @@ public class GameDataDictionary {
 				} else if (type.equals(TAG_ITEM_ATTRIBUTE_TYPE_VALUE_WEAPON)) {
 					mItemMap.put(name, new Weapon(id, name, description, 0));
 				} else if (type.equals(TAG_ITEM_ATTRIBUTE_TYPE_VALUE_ACCESSORY)) {
-					mItemMap.put(name, new ItemBase(id, ItemType.ACCESSORY, name, description, 0));
+					mItemMap.put(name, new ItemBase(id, ItemType.ACCESSORY, name, description));
 				} else if (type.equals(TAG_ITEM_ATTRIBUTE_TYPE_VALUE_LOOT)) {
-					mItemMap.put(name, new ItemBase(id, ItemType.LOOT, name, description, 0));
+					mItemMap.put(name, new ItemBase(id, ItemType.LOOT, name, description));
 				} else if (type.equals(TAG_ITEM_ATTRIBUTE_TYPE_VALUE_KEY)) {
-					mItemMap.put(name, new ItemBase(id, ItemType.KEY, name, description, 0));
+					mItemMap.put(name, new ItemBase(id, ItemType.KEY, name, description));
 				}
 				return null;
 			}

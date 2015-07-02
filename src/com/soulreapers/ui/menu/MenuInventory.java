@@ -39,12 +39,12 @@ public class MenuInventory extends MenuUI {
 //		Inventory inventory = mMenuScene.getInventory();
 		for (ItemType type : ItemType.values()) {
 //			ArrayList<ItemBase> list = inventory.getItemList(type);
-			ArrayList<ItemBase> list = Inventory.getInstance().getItemList(type);
-			for (int i = 0; i < list.size(); ++i) {
-				Debug.d("Inventory item added >> [type:" + type.toString() + ",index:" + i + "]");
-				ItemBase item = list.get(i);
-				mItemMap.get(type).mSlotList.addSlot(item);
-			}
+//			ArrayList<ItemBase> list = Inventory.getInstance().getItemList(type);
+//			for (int i = 0; i < list.size(); ++i) {
+//				Debug.d("Inventory item added >> [type:" + type.toString() + ",index:" + i + "]");
+//				ItemBase item = list.get(i);
+//				mItemMap.get(type).mSlotList.addSlot(item);
+//			}
 		}
 	}
 

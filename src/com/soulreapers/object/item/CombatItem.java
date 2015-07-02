@@ -20,22 +20,22 @@ public class CombatItem extends ItemBase implements IConsumable, IEquipable {
 	 * @param pDescription
 	 * @param pQuantity
 	 */
-	public CombatItem(int pItemId, String pName,
+	public CombatItem(int pItemID, String pName,
 			String pDescription, int pQuantity) {
-		super(pItemId, ItemType.COMBAT, pName, pDescription, pQuantity);
+		super(pItemID, ItemType.COMBAT, pName, pDescription);
 		// TODO
 		// Implement factory which creates Effect class for the item.
 		mEffect = new HealEffect(50);
 	}
 
-	public static final CombatItem EMPTY = new CombatItem(0, GameConstants.STRING.EMPTY, "", 0);
-	public static final CombatItem REMOVE = new CombatItem(0, GameConstants.STRING.REMOVE, "", 0);
+//	public static final CombatItem EMPTY = new CombatItem(0, GameConstants.STRING.EMPTY, "", 0);
+//	public static final CombatItem REMOVE = new CombatItem(0, GameConstants.STRING.REMOVE, "", 0);
 
 	/* (non-Javadoc)
 	 * @see com.soulreapers.object.item.Item.IConsumable#onConsumed(com.soulreapers.object.character.Reaper, com.soulreapers.object.character.Reaper)
 	 */
 	@Override
-	public void onConsumed(BattleCharacter pUser, BattleCharacter pTarget) {
+	public void onConsumed(Reaper pUser, BattleCharacter pTarget) {
 		mEffect.apply(pUser, pTarget);
 	}
 

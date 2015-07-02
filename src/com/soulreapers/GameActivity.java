@@ -18,6 +18,7 @@ import android.content.DialogInterface;
 import android.view.KeyEvent;
 
 import com.soulreapers.core.AudioManager;
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
 import com.soulreapers.core.SceneManager;
 import com.soulreapers.misc.GameConstants;
@@ -56,9 +57,10 @@ public class GameActivity extends BaseGameActivity {
 			OnCreateResourcesCallback pOnCreateResourcesCallback)
 			throws Exception {
 		ResourceManager.getInstance().initialize(this);
+		FontManager.getInstance().initialize(this);
 		AudioManager.getInstance().initialize(this);
 		SceneManager.getInstance().initialize(this);
-		GameDataDictionary.getInstance().initialize(this);
+//		GameDataDictionary.getInstance().initialize(this);
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
 
@@ -66,7 +68,8 @@ public class GameActivity extends BaseGameActivity {
 	public void onDestroy() {
 		Debug.i(">>GameActivity call onDestroy");
 
-		ResourceManager.getInstance().onDestroy();
+		FontManager.getInstance().destroy();
+		ResourceManager.getInstance().destroy();
 		AudioManager.getInstance().onDestroy();
 		super.onDestroy();
 	}
@@ -75,7 +78,7 @@ public class GameActivity extends BaseGameActivity {
 	protected void onPause() {
 		super.onPause();
 		if (this.isGameLoaded()) {
-			SceneManager.getInstance().getCurrentScene().onPause();
+			SceneManager.getInstance().getCurrentScene().pause();
 			AudioManager.getInstance().pauseMusic();
 		}
 	}
@@ -85,7 +88,7 @@ public class GameActivity extends BaseGameActivity {
 		super.onResume();
 		System.gc();
 		if (this.isGameLoaded()) {
-			SceneManager.getInstance().getCurrentScene().onResume();
+			SceneManager.getInstance().getCurrentScene().resume();
 			AudioManager.getInstance().resumeMusic();
 		}
 	}
@@ -105,7 +108,7 @@ public class GameActivity extends BaseGameActivity {
 	@Override
 	public void onDestroyResources() {
 		if (this.isGameLoaded()) {
-			SceneManager.getInstance().getCurrentScene().onDestroyResources();
+			SceneManager.getInstance().getCurrentScene().unloadResource();
 		}
 		try {
 			super.onDestroyResources();

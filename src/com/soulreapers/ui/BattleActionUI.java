@@ -14,7 +14,9 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.HorizontalAlign;
 import org.andengine.util.debug.Debug;
 
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
+import com.soulreapers.core.FontManager.FontType;
 import com.soulreapers.misc.GameConstants;
 import com.soulreapers.scene.BattleScene;
 import com.soulreapers.util.SRButton;
@@ -36,7 +38,7 @@ public class BattleActionUI extends Entity {
 
 //	private static final int FONT_ID = ResourceManager.FONT_TEXT_ID;
 //	private static final int FONT_COMMAND_ID = ResourceManager.FONT_OPTION_ID;
-	private static final int FONT_TITLE_ID = ResourceManager.FONT_TITLE_ID;
+//	private static final int FONT_TITLE_ID = ResourceManager.FONT_TITLE_ID;
 
 	private ActionType mCurrentAction = ActionType.NONE;
 //	private HashMap<ActionType, Text> mActionCommandMap = new HashMap<ActionType, Text>();
@@ -48,7 +50,7 @@ public class BattleActionUI extends Entity {
 	// Menu interface
 	private Text mCurrentCommandText = new Text(GameConstants.X_SUBMENU_PADDING,
 			GameConstants.Y_SUBMENU_PADDING,
-			ResourceManager.getInstance().getFont(FONT_TITLE_ID),
+			FontManager.getInstance().getFont(FontType.FONT_TITLE_SMALL),
 			STRING_ACTION,
 			GameConstants.MAX_CHARACTER_SIZE,
 			ResourceManager.getInstance().getVertexBufferObjectManager());

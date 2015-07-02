@@ -20,74 +20,65 @@
 package com.soulreapers.object.character;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.andengine.util.debug.Debug;
 
-import com.soulreapers.misc.Attributes;
-import com.soulreapers.misc.Attributes.AttributeType;
-import com.soulreapers.object.item.BuffEffect;
-import com.soulreapers.object.item.Effect;
-import com.soulreapers.skill.SkillAttack;
-import com.soulreapers.skill.Skill;
-import com.soulreapers.skill.SkillGesture;
+import com.soulreapers.misc.CharacterParameters;
+import com.soulreapers.misc.CharacterParameters.AttributeType;
 
 /**
- * 
+ *
  * @author dxcloud
  *
  */
 public abstract class BattleCharacter extends GameCharacter {
-	protected HashMap<SkillGesture, SkillAttack> mSkillMap = new HashMap<SkillGesture, SkillAttack>();
-	protected Attributes mAttributes = new Attributes();
+	protected final int mIconID;
+	protected CharacterParameters mParameters = new CharacterParameters();
+	protected ArrayList<ParameterModifier> mModifiers = new ArrayList<ParameterModifier>();
 
-	protected final int mIconId;
-
-	protected ArrayList<Effect> mBuffEffectList = new ArrayList<Effect>();
-
-	public BattleCharacter(String pName, int pIllustrationId, int pIconId, CharacterType pCharacterType) {
-		super(pName, pIllustrationId, pCharacterType);
-		mIconId = pIconId;
+	public BattleCharacter(final int pID,
+			final CharacterType pCharacterType,
+			final String pName,
+			final int pIllustrationID,
+			final int pIconID) {
+		super(pID, pCharacterType, pName, pIllustrationID);
+		mIconID = pIconID;
 	}
 
-	public int getIconId() {
-		return mIconId;
+	public int getIconID() {
+		return mIconID;
 	}
 
-	public SkillAttack getOffensiveSkill(SkillGesture pGesture) {
-		return mSkillMap.get(pGesture);
-	}
-
-	public Attributes getAttributes() {
-		return mAttributes;
+	public CharacterParameters getParameters() {
+		return mParameters;
 	}
 
 	public boolean isDead() {
-		return (mAttributes.isCurrentLessThan(AttributeType.SOUL, 0));
+		return (mParameters.isCurrentLessThan(AttributeType.SOUL, 0));
 	}
 
 	public void receiveDamage(int pAmount) {
-		mAttributes.decreaseCurrent(AttributeType.SOUL, pAmount);
-		Debug.i("current SP="+mAttributes.getCurrent(AttributeType.SOUL));
+		mParameters.decreaseCurrent(AttributeType.SOUL, pAmount);
+		Debug.i("current SP="+mParameters.getCurrent(AttributeType.SOUL));
 	}
 
 	public abstract void onDie();
 
-	private void resetAttributeModifiers() {
-		mAttributes.resetBonus();
-		for (Effect modifier : mBuffEffectList) {
-			modifier.apply(null, this);
+	public void removeAllModifiers() {
+		for (ParameterModifier modifier : mModifiers) {
+			modifier.remove(this.mParameters);
 		}
+		mModifiers.clear();
 	}
 
-	public void addEffect(final Effect pEffect) {
-		mBuffEffectList.add(pEffect);
-		this.resetAttributeModifiers();
+	public void addModifier(final ParameterModifier pModifier) {
+		mModifiers.add(pModifier);
+		pModifier.apply(this.mParameters);
 	}
 
-	public void removeEffect(final Effect pEffect) {
-		mBuffEffectList.remove(pEffect);
-		this.resetAttributeModifiers();
+	public void removeModifier(final ParameterModifier pModifier) {
+		pModifier.remove(this.mParameters);
+		mModifiers.remove(pModifier);
 	}
 
 //	public abstract BattleCharacter instanciate();

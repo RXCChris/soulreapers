@@ -14,7 +14,9 @@ import org.andengine.util.debug.Debug;
 
 import android.opengl.GLES20;
 
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
+import com.soulreapers.core.FontManager.FontType;
 import com.soulreapers.misc.GameConstants;
 import com.soulreapers.util.SRButton;
 
@@ -34,10 +36,11 @@ import com.soulreapers.util.SRButton;
  * }, false, true, true);
  * </pre>
  */
+@Deprecated
 public class ConfirmDialog extends Scene {
 	private static final int X_PADDING = 40;
 	private static final int Y_PADDING = 30;
-	private static final int FONT_ID = ResourceManager.FONT_TEXT_ID;
+//	private static final int FONT_ID = ResourceManager.FONT_TEXT_ID;
 	private static final String STRING_DEFAULT_MESSAGE = "Confirmer ?";
 	private static final String STRING_YES = "Oui";
 	private static final String STRING_NO = "Non";
@@ -88,7 +91,7 @@ public class ConfirmDialog extends Scene {
 		mBackground.setColor(GameConstants.UI.COLOR_BACKGROUND);
 
 		mMessageText = new Text(0, 0,
-				ResourceManager.getInstance().getFont(FONT_ID),
+				FontManager.getInstance().getFont(FontType.FONT_TEXT_MEDIUM),
 				pMessage,
 				new TextOptions(HorizontalAlign.CENTER),
 				ResourceManager.getInstance().getVertexBufferObjectManager());

@@ -13,6 +13,7 @@ import com.soulreapers.core.ResourceManager;
  * @author chris
  *
  */
+@Deprecated
 public class Grid {
 	static class Cell extends Rectangle {
 		private static final int MAX_CELL_PER_ROW = 8;

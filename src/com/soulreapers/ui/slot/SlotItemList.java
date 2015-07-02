@@ -10,6 +10,7 @@ import com.soulreapers.ui.menu.SubMenuLayout;
  * @author chris
  *
  */
+@Deprecated
 public class SlotItemList<T extends ItemBase> extends SlotList<T, SlotItem<T>> {
 //	private SubMenuLayout mSubMenuLayout;
 

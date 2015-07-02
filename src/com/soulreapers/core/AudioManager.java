@@ -21,6 +21,13 @@ import com.soulreapers.GameActivity;
  * TODO Sound handling methods
  */
 public class AudioManager {
+	public enum MusicID {
+		TITLE,
+		MENU,
+		BATTLE_1,
+		BATTLE_2,
+		BATTLE_BOSS
+	}
 	/**
 	 * Unique instance of the class.
 	 */
@@ -98,8 +105,6 @@ public class AudioManager {
 			loadMusic(pTrack);
 		}
 
-		if (!mMusicEnabled) { return; }
-
 		if (mMusicMap.containsKey(pTrack) && isMusicEnabled()) {
 			Music music = mMusicMap.get(pTrack);
 			try {
@@ -107,13 +112,14 @@ public class AudioManager {
 				if (pReset) {
 					music.seekTo(0);
 				}
-				music.play();
+				if (mMusicEnabled) { music.play(); }
 			} catch (MusicReleasedException e) {
 				e.printStackTrace();
 			}
 		}
 		mPlayingTrack = pTrack;
 		Debug.d("AudioManager : playing " + mActivity.getString(pTrack));
+
 	}
 
 	/**

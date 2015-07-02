@@ -11,7 +11,7 @@ import com.soulreapers.misc.GameProgressionRecord;
  * @author CChris
  *
  */
-public class SceneNavigator extends BaseScene {
+public class SceneNavigator extends UI_Scene {
 
 	/* (non-Javadoc)
 	 * @see com.soulreapers.scene.BaseScene#onLoadResources()

@@ -88,7 +88,7 @@ public class MenuEquip extends MenuUI {
 		MenuEquip.this.attachChild(mSlotReaperList);
 		this.setAllReaperSlotVisible(false);
 
-//		mEquipOptionList.add(new EquipWeapon(MenuEquip.this, "Weapon"));
+		mEquipOptionList.add(new EquipWeapon(MenuEquip.this, GameConstants.STRING.WEAPON));
 //		mEquipOptionList.add(new EquipWeapon(MenuEquip.this, "Accessory"));
 		mEquipOptionList.add(new EquipItem(MenuEquip.this, GameConstants.STRING.ITEM));
 

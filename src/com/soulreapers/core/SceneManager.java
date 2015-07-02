@@ -25,14 +25,8 @@ public class SceneManager {
 	private Engine mEngine;
 	private GameActivity mActivity;
 
-	private BaseScene mCurrentScene;
+	private UI_Scene mCurrentScene;
 	private LoadingScene mLoadingScene;
-
-	public enum SceneType {
-		TITLE_MENU,
-		GAME_MENU,
-		OPTION_MENU
-	}
 
 	private SceneManager() {
 		// nothing to do
@@ -55,11 +49,11 @@ public class SceneManager {
 		return mActivity;
 	}
 
-	public BaseScene getCurrentScene() {
+	public UI_Scene getCurrentScene() {
 		return mCurrentScene;
 	}
 
-	private void setCurrentScene(BaseScene scene) {
+	private void setCurrentScene(UI_Scene scene) {
 		mCurrentScene = scene;
 	}
 
@@ -78,7 +72,7 @@ public class SceneManager {
 			protected Void doInBackground(Void... params) {
 				long timestamp = System.currentTimeMillis();
 				// TODO load common resources
-				MainMenuScene menu = new MainMenuScene();
+				SceneTitle menu = new SceneTitle();
 //				menu.initialize(mActivity, mResourceManager);
 				menu.onLoadResources();
 				menu.onCreate();
@@ -105,27 +99,27 @@ public class SceneManager {
 		pOnCreateSceneCallback.onCreateSceneFinished(splash);
 	}
 
-	public void showScene(Class<? extends BaseScene> sceneClass) {
+	public void showScene(Class<? extends UI_Scene> sceneClass) {
 		if (sceneClass == LoadingScene.class) {
 			throw new IllegalArgumentException("you can't switch to Loading scene");
 		}
 		try {
-			final BaseScene scene = sceneClass.newInstance();
+			final UI_Scene scene = sceneClass.newInstance();
 			Debug.i("Showing scene: " + scene.getClass().getName());
 
-			final BaseScene oldScene = getCurrentScene();
+			final UI_Scene oldScene = getCurrentScene();
 			setCurrentScene(mLoadingScene);
 			mEngine.setScene(mLoadingScene);
 			new AsyncTask<Void, Void, Void>() {
 				@Override
 				protected Void doInBackground(Void... params) {
 					if (oldScene != null) {
-						oldScene.onDestroyResources();
-						oldScene.onDestroy();
+						oldScene.unloadResource();
+						oldScene.destroy();
 					}
 //					scene.initialize(mActivity, mResourceManager);
-					scene.onLoadResources();
-					scene.onCreate();
+					scene.loadResources();
+					scene.create();
 					setCurrentScene(scene);
 					mEngine.setScene(scene);
 					return null;

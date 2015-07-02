@@ -11,9 +11,11 @@ import org.andengine.entity.text.TextOptions;
 import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
 
+import com.soulreapers.core.FontManager;
+import com.soulreapers.core.FontManager.FontType;
 import com.soulreapers.core.ResourceManager;
-import com.soulreapers.misc.Attributes;
-import com.soulreapers.misc.Attributes.AttributeType;
+import com.soulreapers.misc.CharacterParameters;
+import com.soulreapers.misc.CharacterParameters.AttributeType;
 import com.soulreapers.object.Gauge;
 
 
@@ -23,8 +25,8 @@ import com.soulreapers.object.Gauge;
  */
 @Deprecated
 public class AttributesUI extends Rectangle {
-	private static final int FONT_STATS_ID = ResourceManager.FONT_STATS_ID;
-	private static final int FONT_NAME_ID = ResourceManager.FONT_TEXT_ID;
+//	private static final int FONT_STATS_ID = ResourceManager.FONT_STATS_ID;
+//	private static final int FONT_NAME_ID = ResourceManager.FONT_TEXT_ID;
 	private static final String STRING_LEVEL = "Lv. ";
 	private static final String STATUS_DOUBLE_VALUE_FORMAT = "%03d (%+03d)";
 	private static final String STATUS_MIN_MAX_VALUE_FORMAT = "%03d/%03d";
@@ -53,7 +55,7 @@ public class AttributesUI extends Rectangle {
 //	private Text mTextName;
 	private Text mTextLevel;
 
-	private Attributes mAttributes;
+	private CharacterParameters mAttributes;
 
 	private HashMap<AttributeType, AttributeText> mStatusTextMap =
 			new HashMap<AttributeType, AttributeText>();
@@ -61,10 +63,10 @@ public class AttributesUI extends Rectangle {
 	public Gauge mExpGauge = null;
 
 	public AttributesUI() {
-		this(new Attributes());
+		this(new CharacterParameters());
 	}
 
-	public AttributesUI(Attributes pStatus) {
+	public AttributesUI(CharacterParameters pStatus) {
 		super(RECTANGLE_X, RECTANGLE_Y,
 				RECTANGLE_WIDTH, RECTANGLE_HEIGHT,
 				ResourceManager.getInstance().getVertexBufferObjectManager());
@@ -75,7 +77,7 @@ public class AttributesUI extends Rectangle {
 		this.setAlpha(0.75F);
 	}
 
-	public void setStatus(Attributes pStatus) {
+	public void setStatus(CharacterParameters pStatus) {
 		if (pStatus == null) { return; }
 
 		updateAll(pStatus);
@@ -86,7 +88,7 @@ public class AttributesUI extends Rectangle {
 		updateAll(mAttributes);
 	}
 
-	public void updateAll(Attributes pAttribute) {
+	public void updateAll(CharacterParameters pAttribute) {
 		for (AttributeType type : AttributeType.values()) {
 			updateAttribute(type, pAttribute);
 		}
@@ -96,7 +98,7 @@ public class AttributesUI extends Rectangle {
 	private void addAttributeText(int pX, int pY, AttributeType pAttribute,
 			int pBase, int pBonus, int pCurrent) {
 		Text statusName = new Text(pX, pY,
-				ResourceManager.getInstance().getFont(FONT_STATS_ID),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 				pAttribute.toString(),
 				new TextOptions(HorizontalAlign.LEFT),
 				ResourceManager.getInstance().getVertexBufferObjectManager());
@@ -106,14 +108,14 @@ public class AttributesUI extends Rectangle {
 		if (pAttribute == AttributeType.SOUL || pAttribute == AttributeType.EXPERIENCE ) {
 			padding = AttributeText.PADDING_GAUGE;
 			statusValue = new Text(pX + AttributeText.PADDING_GAUGE, pY,
-					ResourceManager.getInstance().getFont(FONT_STATS_ID),
+					FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 					String.format(STATUS_SINGLE_VALUE_FORMAT, pCurrent),
 					MAX_CHAR_STATUS_VALUE,
 					new TextOptions(HorizontalAlign.RIGHT),
 					ResourceManager.getInstance().getVertexBufferObjectManager());
 		} else {
 			statusValue = new Text(pX + padding, pY,
-					ResourceManager.getInstance().getFont(FONT_STATS_ID),
+					FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 					String.format(STATUS_DOUBLE_VALUE_FORMAT, pBase, pBonus),
 					MAX_CHAR_STATUS_VALUE,
 					new TextOptions(HorizontalAlign.LEFT),
@@ -123,9 +125,9 @@ public class AttributesUI extends Rectangle {
 		mStatusTextMap.put(pAttribute, new AttributeText(statusName, statusValue));
 	}
 
-	private void onCreateUI(Attributes pStatus) {
+	private void onCreateUI(CharacterParameters pStatus) {
 		mTextLevel = new Text(OFFSET_X + PADDING_LEVEL_X, OFFSET_Y,
-				ResourceManager.getInstance().getFont(FONT_NAME_ID),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 				STRING_LEVEL + pStatus.getLevel(),
 				new TextOptions(HorizontalAlign.RIGHT),
 				ResourceManager.getInstance().getVertexBufferObjectManager());
@@ -161,7 +163,7 @@ public class AttributesUI extends Rectangle {
 		
 	}
 
-	private void updateAttribute(AttributeType pType, Attributes pAttribute) {
+	private void updateAttribute(AttributeType pType, CharacterParameters pAttribute) {
 		Text textValue = mStatusTextMap.get(pType).mAttributeValue;
 		if (pType == AttributeType.SOUL) {
 			textValue.setText(String.format(STATUS_SINGLE_VALUE_FORMAT,

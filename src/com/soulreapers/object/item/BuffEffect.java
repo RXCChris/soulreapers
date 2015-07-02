@@ -3,7 +3,7 @@
  */
 package com.soulreapers.object.item;
 
-import com.soulreapers.misc.Attributes.AttributeType;
+import com.soulreapers.misc.CharacterParameters.AttributeType;
 import com.soulreapers.object.character.BattleCharacter;
 import com.soulreapers.object.character.GameCharacter.CharacterType;
 
@@ -28,11 +28,11 @@ public class BuffEffect extends Effect {
 	 */
 	@Override
 	public void apply(BattleCharacter pUser, BattleCharacter pTarget) {
-		float value = mBaseValue;
-		if (mValueType == ValueType.PROPORTIONAL) {
-			value *= pTarget.getAttributes().getBase(mAttributeType);
-		}
-		pTarget.getAttributes().increaseBonus(mAttributeType, (int) value);
+//		float value = mBaseValue;
+//		if (mValueType == ValueType.PROPORTIONAL) {
+//			value *= pTarget.getAttributes().getBase(mAttributeType);
+//		}
+//		pTarget.getAttributes().increaseBonus(mAttributeType, (int) value);
 	}
 
 	/* (non-Javadoc)

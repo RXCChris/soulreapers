@@ -2,106 +2,105 @@ package com.soulreapers.core;
 
 import java.util.HashMap;
 
-import org.andengine.opengl.font.Font;
-import org.andengine.opengl.font.FontFactory;
-import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
 import android.content.res.AssetManager;
 
 import com.soulreapers.GameActivity;
 import com.soulreapers.R;
-import com.soulreapers.misc.GameConstants;
 
-public class ResourceManager {
+public class ResourceManager implements IManager {
 	/**
 	 * Unique instance of the class.
 	 */
 	private static final ResourceManager INSTANCE = new ResourceManager();
+	private static final String TEXTURE_PATH = "gfx/";
 
 	private GameActivity mActivity;
-	private HashMap<Integer, Font> mFontMap = new HashMap<Integer, Font>();
+	private static boolean mInitialized = false;
 
-	public static final int FONT_TITLE_ID = 48;
-	public static final int FONT_TEXT_ID  = 24;
-	public static final int FONT_SUB_TITLE_ID = 20;
-	public static final int FONT_OPTION_ID = 36;
-	public static final int FONT_STATS_ID = 14;
+	private HashMap<Integer, MappedTexture> mMappedTextures = new HashMap<Integer, MappedTexture>();
 
 
-	private HashMap<Integer, Texture> mMappedTexture = new HashMap<Integer, Texture>();
-
-	private class Texture {
-		public BitmapTextureAtlas mTextureAtlas;
-		public TextureRegion      mTextureRegion;
-		public Texture(final String pAssetPath, final int pWidth, final int pHeight) {
-			mTextureAtlas = new BitmapTextureAtlas(getTextureManager(),
-					pWidth, pHeight, TextureOptions.BILINEAR);
-			mTextureRegion = BitmapTextureAtlasTextureRegionFactory
-					.createFromAsset(mTextureAtlas, getInstance().mActivity,
-							pAssetPath, 0, 0);
-			mTextureAtlas.load();
-		}
-	};
+//	private enum TextureType {
+//		ILLUSTRATION("illust/"),
+//		ICON("icon/"),
+//		BACKGROUND("bg/"),
+//		MISC("misc/");
+//
+//		private String mPathPrefix;
+//
+//		private TextureType(final String pPathPrefix) {
+//			mPathPrefix = pPathPrefix;
+//		}
+//	}
 
 	public AssetManager getAssetManager() {
 		return mActivity.getAssets();
 	}
 
-	public TextureRegion getTextureRegion(final int pResId) {
-		return getInstance().mMappedTexture.get(pResId).mTextureRegion;
-	}
-
-	public TextureRegion loadTexture(final int pResId, final int pWidth, final int pHeight) {
-		if (!getInstance().mMappedTexture.containsKey(pResId)) {
-			getInstance().mMappedTexture.put(pResId,
-					new Texture(getInstance().mActivity.getString(pResId), pWidth, pHeight));
-		}
-		return getInstance().mMappedTexture.get(pResId).mTextureRegion;
-	}
-
-	public void unloadTexture(final int pResId) {
-		if (!getInstance().mMappedTexture.containsKey(pResId)) { return; }
-		Texture texture = getInstance().mMappedTexture.remove(pResId);
-		texture.mTextureAtlas.unload();
-		texture.mTextureRegion = null;
-	}
-
 	private ResourceManager() {
-		// nothing to do
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(TEXTURE_PATH);
+	}
+
+	public TextureRegion getTextureRegion(final int pTextureID) {
+		if (!this.loadTexture(pTextureID)) {
+			Debug.e("[ResourceManager]: Loading texture ID:"
+					+ pTextureID + " >> failed.");
+		}
+		return mMappedTextures.get(pTextureID).getTextureRegion();
+	}
+
+	public boolean loadTexture(final int pTextureID) {
+		if (!mMappedTextures.containsKey(pTextureID)) {
+			if (!this.loadTextureFromData(pTextureID)) { return false; }
+		}
+		MappedTexture texture = mMappedTextures.get(pTextureID);
+		if (!texture.isLoaded()) { texture.load(); }
+		return true;
+	}
+
+	private boolean loadTextureFromData(final int pTextureID) {
+		// TODO
+		final String filename = "";
+		final int width = 0;
+		final int height = 0;
+		MappedTexture texture = new MappedTexture(filename, width, height);
+		mMappedTextures.put(pTextureID, texture);
+		Debug.i("[ResourceManager]: Loading texture from Data [ID:"+pTextureID+"].");
+		return true;
+	}
+
+	public float getTextureWidth(final int pTextureID) {
+		return mMappedTextures.get(pTextureID).getWidth();
+	}
+	public float getTextureHeight(final int pTextureID) {
+		return mMappedTextures.get(pTextureID).getHeight();
+	}
+
+	public boolean unloadTexture(final int pTextureID) {
+		if (mMappedTextures.containsKey(pTextureID)) { return false; }
+
+		MappedTexture texture = mMappedTextures.get(pTextureID);
+		if (texture.isLoaded()) { texture.unload(); }
+		return true;
 	}
 
 	public static ResourceManager getInstance() {
+		if (!mInitialized) {
+			Debug.w("[ResourceManager]: ResourceManager may not initialized!");
+		}
 		return INSTANCE;
 	}
 
-	/**
-	 * Get the ITextureRegion.
-	 * @param pBitmapTextureAtlas BitmapTextureAtlas to build ITextureRegion
-	 * @param pResId
-	 * @return ITextureRegion
-	 */
-	public ITextureRegion getTextureRegion(BitmapTextureAtlas pBitmapTextureAtlas,
-			int pResId) {
-		return BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(pBitmapTextureAtlas, getInstance().mActivity,
-						getInstance().mActivity.getString(pResId), 0, 0);
-	}
-
-	/**
-	 * Get the TextureManager.
-	 * @return TextureManager
-	 */
 	public TextureManager getTextureManager() {
-		return getInstance().mActivity.getTextureManager();
+		return mActivity.getTextureManager();
 	}
 
 	/**
@@ -112,8 +111,18 @@ public class ResourceManager {
 	 * @param pActivity Game activity
 	 */
 	public void initialize(GameActivity pActivity) {
-		getInstance().mActivity = pActivity;
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		mActivity = pActivity;
+		mInitialized = true;
+		Debug.i("[ResourceManager]: Initialization >> completed.");
+		//---------------------------------------------------------------------
+		// TEST
+		//---------------------------------------------------------------------
+		mMappedTextures.put(1, new MappedTexture("background/bg_splash.png", 800, 480));
+		mMappedTextures.put(R.string.bg_04, new MappedTexture("background/bg_menu_back.png", 800, 800));
+		mMappedTextures.put(R.string.bg_03, new MappedTexture("background/bg_menu_3.png", 800, 480));
+		mMappedTextures.put(R.string.bt_normal, new MappedTexture("button/bt_texture.png", 114, 114));
+		mMappedTextures.put(R.string.pc_01, new MappedTexture("object/pc_dante.png", 320, 480));
+		mMappedTextures.put(R.string.ic_01, new MappedTexture("object/ic_dante.png", 50, 50));
 	}
 
 	/**
@@ -121,86 +130,74 @@ public class ResourceManager {
 	 * @param resId
 	 * @return
 	 */
-	public String getResourceString(int resId) {
-		return getInstance().mActivity.getString(resId);
+	public String getResourceString(int pResourceID) {
+		return getInstance().mActivity.getString(pResourceID);
 	}
 
-	public ITextureRegion getTextureRegion(int pResId, int pWidth, int pHeight) {
-		BitmapTextureAtlas characterTextureAtlas = new BitmapTextureAtlas(
-				ResourceManager.getInstance().getTextureManager(),
-				pWidth,
-				pHeight,
-				TextureOptions.BILINEAR);
-		ITextureRegion characterTextureRegion = getTextureRegion(characterTextureAtlas, pResId);
-		characterTextureAtlas.load();
-		return characterTextureRegion;
-	}
-
-	private void loadFont(int resId) {
-		Debug.i(">> load font");
-		FontFactory.setAssetBasePath("gfx/");
-		Font font;
-//		if (resId == R.string.ft_text) {
-		if (resId == FONT_TEXT_ID) {
-			final ITexture fontTexture = new BitmapTextureAtlas(getInstance().getTextureManager(),
-					256, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-			font = FontFactory.createStrokeFromAsset(getInstance().mActivity.getFontManager(),
-					fontTexture, getInstance().mActivity.getAssets(), getInstance().mActivity.getString(R.string.ft_text),
-					FONT_TEXT_ID, true, Color.WHITE_ARGB_PACKED_INT, 0.5f, Color.BLACK_ARGB_PACKED_INT);
-		} else if (resId == FONT_TITLE_ID) {
-			final ITexture fontTexture = new BitmapTextureAtlas(getInstance().getTextureManager(),
-				256, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-			font = FontFactory.createStrokeFromAsset(getInstance().mActivity.getFontManager(),
-				fontTexture, getInstance().mActivity.getAssets(), getInstance().mActivity.getString(R.string.ft_03),
-				FONT_TITLE_ID, true, Color.BLACK_ARGB_PACKED_INT, 1.0f, Color.WHITE_ARGB_PACKED_INT);
-		} else if (resId == FONT_STATS_ID) {
-			final ITexture fontTexture = new BitmapTextureAtlas(getInstance().getTextureManager(),
-					256, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-				font = FontFactory.createStrokeFromAsset(getInstance().mActivity.getFontManager(),
-					fontTexture, getInstance().mActivity.getAssets(), getInstance().mActivity.getString(R.string.ft_text),
-					FONT_STATS_ID, true, Color.BLACK_ARGB_PACKED_INT, 1.0f, Color.WHITE_ARGB_PACKED_INT);
-		} else if (resId == FONT_SUB_TITLE_ID) {
-			final ITexture fontTexture = new BitmapTextureAtlas(getInstance().getTextureManager(),
-					256, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-				font = FontFactory.createStrokeFromAsset(getInstance().mActivity.getFontManager(),
-					fontTexture, getInstance().mActivity.getAssets(), getInstance().mActivity.getString(R.string.ft_command),
-					resId, true, Color.WHITE_ARGB_PACKED_INT, 0.5f, Color.BLACK_ARGB_PACKED_INT);
-		} else {
-			final ITexture fontTexture = new BitmapTextureAtlas(getInstance().getTextureManager(),
-					256, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-				font = FontFactory.createStrokeFromAsset(getInstance().mActivity.getFontManager(),
-					fontTexture, getInstance().mActivity.getAssets(), getInstance().mActivity.getString(R.string.ft_command),
-					FONT_OPTION_ID, true, Color.BLACK_ARGB_PACKED_INT, 1.0f, Color.WHITE_ARGB_PACKED_INT);
-		}
-		font.load();
-		getInstance().mFontMap.put(resId, font);
-	}
-
-	public Font getFont(int resId) {
-		if (!getInstance().mFontMap.containsKey(resId)) {
-			loadFont(resId);
-		}
-		return getInstance().mFontMap.get(resId);
-	}
-
-	private void unloadFont() {
-		Debug.i(">>ResourceManager unload font");
-		for (Font object : getInstance().mFontMap.values()) {
-			object.unload();
-		}
-		getInstance().mFontMap.clear();
-	}
 
 	public VertexBufferObjectManager getVertexBufferObjectManager() {
 		return getInstance().mActivity.getVertexBufferObjectManager();
 	}
 
-	public void onDestroy() {
-		unloadFont();
-		for (Texture texture : getInstance().mMappedTexture.values()) {
-			texture.mTextureAtlas.unload();
-			texture.mTextureRegion = null;
+	/* (non-Javadoc)
+	 * @see com.soulreapers.core.IManager#destroy()
+	 */
+	@Override
+	public void destroy() {
+		for (MappedTexture texture : mMappedTextures.values()) {
+			texture.unload();
 		}
-		getInstance().mMappedTexture.clear();
+		mMappedTextures.clear();
+		Debug.i("[ResourceManager]: Unloading textures >> completed.");
 	}
+
+	private class MappedTexture {
+		private BitmapTextureAtlas mTextureAtlas;
+		private TextureRegion      mTextureRegion;
+		private boolean mLoaded = false;
+
+		public MappedTexture(final String pAssetPath, final int pWidth, final int pHeight, boolean pLoad) {
+			mTextureAtlas = new BitmapTextureAtlas(
+					mActivity.getTextureManager(),
+					pWidth,
+					pHeight,
+					TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+			mTextureRegion = BitmapTextureAtlasTextureRegionFactory
+					.createFromAsset(mTextureAtlas,
+							mActivity,
+							pAssetPath, 0, 0);
+			if (pLoad) { MappedTexture.this.load(); }
+		}
+
+		public MappedTexture(final String pAssetPath, final int pWidth, final int pHeight) {
+			this(pAssetPath, pWidth, pHeight, false);
+		}
+
+		public boolean isLoaded() {
+			return mLoaded;
+		}
+
+		public void load() {
+			mTextureAtlas.load();
+			mLoaded = true;
+		}
+
+		public void unload() {
+			mTextureAtlas.unload();
+			mTextureRegion = null;
+			mLoaded = false;
+		}
+
+		public float getWidth() {
+			return mTextureRegion.getWidth();
+		}
+
+		public float getHeight() {
+			return mTextureRegion.getHeight();
+		}
+
+		public TextureRegion getTextureRegion() {
+			return mTextureRegion;
+		}
+	};
 }

@@ -7,7 +7,9 @@ import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.text.Text;
 import org.andengine.util.color.Color;
 
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
+import com.soulreapers.core.FontManager.FontType;
 
 /**
  * @author chris
@@ -15,7 +17,7 @@ import com.soulreapers.core.ResourceManager;
  */
 @Deprecated
 public class SlotUI extends Rectangle {
-	protected static final int FONT_TEXT_ID = ResourceManager.FONT_TEXT_ID;
+//	protected static final int FONT_TEXT_ID = ResourceManager.FONT_TEXT_ID;
 
 	protected static final float RECTANGLE_WIDTH = 380;
 	protected static final float RECTANGLE_HEIGHT = 36;
@@ -43,7 +45,7 @@ public class SlotUI extends Rectangle {
 				RECTANGLE_WIDTH, RECTANGLE_HEIGHT,
 				ResourceManager.getInstance().getVertexBufferObjectManager());
 		mText = new Text(TEXT_PADDING_X, 0,
-				ResourceManager.getInstance().getFont(FONT_TEXT_ID),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 				pText,
 				MAX_CHAR_SIZE,
 				ResourceManager.getInstance().getVertexBufferObjectManager());

@@ -41,8 +41,10 @@ import org.andengine.util.color.Color;
 
 import com.soulreapers.R;
 import com.soulreapers.core.AudioManager;
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
 import com.soulreapers.core.SceneManager;
+import com.soulreapers.core.FontManager.FontType;
 import com.soulreapers.misc.ConditionState;
 import com.soulreapers.misc.GameConstants;
 import com.soulreapers.misc.GameProgressionRecord;
@@ -54,11 +56,11 @@ import com.soulreapers.misc.GameProgressionRecord;
  * @author dxcloud
  *
  */
-public class PrologueScene extends BaseScene implements IOnSceneTouchListener, IScrollDetectorListener {
+public class PrologueScene extends UI_Scene implements IOnSceneTouchListener, IScrollDetectorListener {
 	private static final int CARD_PADDING = 20;
 	private static final int MAX_NUM_SELECTABLE_CARD = 3;
 	private static final int MAX_NUM_CARD = 22;
-	private static final int FONT_ID = ResourceManager.FONT_TEXT_ID;
+//	private static final int FONT_ID = ResourceManager.FONT_TEXT_ID;
 	private SurfaceScrollDetector mSurfaceScrollDetector;
 	private Sprite mHintBackgroundSprite;
 	private Text mHintText;
@@ -88,7 +90,7 @@ public class PrologueScene extends BaseScene implements IOnSceneTouchListener, I
 					ResourceManager.getInstance().getTextureManager(),
 					100, 200, TextureOptions.BILINEAR);
 			mCardTextureRegion = ResourceManager.getInstance()
-					.getTextureRegion(cardBitmapTextureAtlas, mCardId);
+					.getTextureRegion(mCardId);
 			cardBitmapTextureAtlas.load();
 		}
 		public String getCardDescription() {
@@ -163,7 +165,7 @@ public class PrologueScene extends BaseScene implements IOnSceneTouchListener, I
 				ResourceManager.getInstance().getTextureManager(),
 				800, 480, TextureOptions.BILINEAR);
 		ITextureRegion hintTextureRegion = ResourceManager.getInstance()
-				.getTextureRegion(hintBitmapTextureAtlas, R.string.bg_05);
+				.getTextureRegion(R.string.bg_05);
 		hintBitmapTextureAtlas.load();
 		mHintBackgroundSprite = new Sprite(0, 0,
 				hintTextureRegion,
@@ -171,7 +173,7 @@ public class PrologueScene extends BaseScene implements IOnSceneTouchListener, I
 		this.attachChild(mHintBackgroundSprite);
 
 		mHintText = new Text(200, 200,
-				ResourceManager.getInstance().getFont(FONT_ID),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 				ResourceManager.getInstance().getResourceString(R.string.mg_04),
 				ResourceManager.getInstance().getResourceString(R.string.mg_04).length(),
 				new TextOptions(HorizontalAlign.CENTER),
@@ -179,7 +181,7 @@ public class PrologueScene extends BaseScene implements IOnSceneTouchListener, I
 		this.attachChild(mHintText);
 
 		mContinueText = new Text(SceneManager.getInstance().getCamera().getCenterX() + 100, 420,
-				ResourceManager.getInstance().getFont(FONT_ID),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 				ResourceManager.getInstance().getResourceString(R.string.tb_12),
 				new TextOptions(HorizontalAlign.LEFT),
 				ResourceManager.getInstance().getVertexBufferObjectManager()) {
@@ -312,7 +314,7 @@ public class PrologueScene extends BaseScene implements IOnSceneTouchListener, I
 		this.attachChild(sprite);
 
 		Text text = new Text(x + sprite.getWidth() + CARD_PADDING, y,
-				ResourceManager.getInstance().getFont(FONT_ID),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 				mCardDescriptionList.get(numCardToShow).getCardDescription(),
 				new TextOptions(HorizontalAlign.LEFT),
 				ResourceManager.getInstance().getVertexBufferObjectManager());

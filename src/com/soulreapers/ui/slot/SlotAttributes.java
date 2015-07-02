@@ -10,9 +10,11 @@ import org.andengine.entity.text.TextOptions;
 import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
 
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
-import com.soulreapers.misc.Attributes;
-import com.soulreapers.misc.Attributes.AttributeType;
+import com.soulreapers.core.FontManager.FontType;
+import com.soulreapers.misc.CharacterParameters;
+import com.soulreapers.misc.CharacterParameters.AttributeType;
 import com.soulreapers.misc.GameConstants;
 import com.soulreapers.object.Gauge;
 
@@ -20,10 +22,11 @@ import com.soulreapers.object.Gauge;
  * @author chris
  *
  */
-public class SlotAttributes extends Slot<Attributes> {
+@Deprecated
+public class SlotAttributes extends Slot<CharacterParameters> {
 
-	private static final int FONT_STATS_ID = ResourceManager.FONT_STATS_ID;
-	private static final int FONT_NAME_ID = ResourceManager.FONT_TEXT_ID;
+//	private static final int FONT_STATS_ID = ResourceManager.FONT_STATS_ID;
+//	private static final int FONT_NAME_ID = ResourceManager.FONT_TEXT_ID;
 	private static final String STRING_LEVEL_FORMAT = "Lv.\t %3d";
 //	private static final String STATUS_DOUBLE_VALUE_FORMAT = "%03d (%+03d)";
 //	private static final String STATUS_MIN_MAX_VALUE_FORMAT = "%03d/%03d";
@@ -64,13 +67,13 @@ public class SlotAttributes extends Slot<Attributes> {
 //		super(new Attributes());
 //	}
 
-	public SlotAttributes(Attributes pAttributes) {
+	public SlotAttributes(CharacterParameters pAttributes) {
 		super(RECTANGLE_X, RECTANGLE_Y,
 				RECTANGLE_WIDTH, RECTANGLE_HEIGHT,
 				pAttributes);
 
 		mTextLevel = new Text(OFFSET_X + PADDING_LEVEL_X, OFFSET_Y,
-				ResourceManager.getInstance().getFont(FONT_NAME_ID),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 				String.format(STRING_LEVEL_FORMAT, pAttributes.getLevel()),
 				new TextOptions(HorizontalAlign.RIGHT),
 				ResourceManager.getInstance().getVertexBufferObjectManager());
@@ -122,7 +125,7 @@ public class SlotAttributes extends Slot<Attributes> {
 
 	private void addAttributeText(int pX, int pY, AttributeType pAttribute) {
 		final Text attributeName = new Text(pX, pY,
-				ResourceManager.getInstance().getFont(FONT_STATS_ID),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 				pAttribute.toString(),
 				new TextOptions(HorizontalAlign.LEFT),
 				ResourceManager.getInstance().getVertexBufferObjectManager());
@@ -134,7 +137,7 @@ public class SlotAttributes extends Slot<Attributes> {
 			final int current = mElement.getCurrent(pAttribute);
 
 			statusValue = new Text(pX + TextAttribute.PADDING_GAUGE, pY,
-					ResourceManager.getInstance().getFont(FONT_STATS_ID),
+					FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 					String.format(STATUS_SINGLE_VALUE_FORMAT, current),
 					MAX_CHAR_STATUS_VALUE,
 					new TextOptions(HorizontalAlign.RIGHT),
@@ -144,7 +147,7 @@ public class SlotAttributes extends Slot<Attributes> {
 			final int bonus = mElement.getBonus(pAttribute);
 			final int total = mElement.getTotal(pAttribute);
 			statusValue = new Text(pX + padding, pY,
-					ResourceManager.getInstance().getFont(FONT_STATS_ID),
+					FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 					String.format(STATUS_TRIPLE_VALUE_FORMAT, base, bonus, total),
 					MAX_CHAR_STATUS_VALUE,
 					new TextOptions(HorizontalAlign.LEFT),

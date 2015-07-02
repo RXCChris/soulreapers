@@ -37,16 +37,18 @@ import org.andengine.util.debug.Debug;
 
 import com.soulreapers.R;
 import com.soulreapers.core.AudioManager;
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
 import com.soulreapers.core.SceneManager;
+import com.soulreapers.core.FontManager.FontType;
 import com.soulreapers.misc.GameConstants;
-import com.soulreapers.object.character.CharacterCollection;
+//import com.soulreapers.object.character.CharacterCollection;
 import com.soulreapers.object.character.reaper.Reaper;
 
-
-public class GameScene extends BaseScene {
-	private static final int FONT_ID = ResourceManager.FONT_OPTION_ID;
-	private static final int FONT_TITLE_ID = ResourceManager.FONT_TITLE_ID;
+@Deprecated
+public class GameScene extends UI_Scene {
+//	private static final int FONT_ID = ResourceManager.FONT_OPTION_ID;
+//	private static final int FONT_TITLE_ID = ResourceManager.FONT_TITLE_ID;
 
 	private HashMap<OptionMenu, Text> mOptionTextMap = new HashMap<OptionMenu, Text>();
 
@@ -58,7 +60,7 @@ public class GameScene extends BaseScene {
 
 	private Text mTextMenuTitle = new Text(GameConstants.X_SUBMENU_PADDING,
 			GameConstants.Y_SUBMENU_PADDING,
-			ResourceManager.getInstance().getFont(FONT_TITLE_ID),
+			FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 			ResourceManager.getInstance().getResourceString(R.string.tb_main),
 			GameConstants.MAX_CHARACTER_SIZE,
 			ResourceManager.getInstance().getVertexBufferObjectManager());
@@ -84,7 +86,7 @@ public class GameScene extends BaseScene {
 					@Override
 					protected void onPositive() {
 						back();
-						SceneManager.getInstance().showScene(MainMenuScene.class);
+						SceneManager.getInstance().showScene(SceneTitle.class);
 					}
 					@Override
 					protected void onNegative() {
@@ -137,7 +139,7 @@ public class GameScene extends BaseScene {
 			public void setSubMenu(GameScene scene) {
 				scene.mTextMenuTitle.setText(OptionMenu.STATUS.toString());
 				createSubMenu(scene);
-				scene.mPlayer.setVisible(true);
+//				scene.mPlayer.setVisible(true);
 //				scene.mPlayer.updateSkill();
 //				scene.mPlayer.updateStatus();
 //				scene.mPlayer.setSkillVisible(true);
@@ -147,7 +149,7 @@ public class GameScene extends BaseScene {
 			@Override
 			public void back(GameScene scene) {
 				destroySubMenu(scene);
-				scene.mPlayer.setVisible(false);
+//				scene.mPlayer.setVisible(false);
 			}
 		},
 		// Map: tb_10
@@ -253,11 +255,11 @@ public class GameScene extends BaseScene {
 				ResourceManager.getInstance().getTextureManager(),
 				800, 800, TextureOptions.BILINEAR);
 		mBackgroundTextureRegion = ResourceManager.getInstance()
-				.getTextureRegion(mBackgroundTextureAtlas, R.string.bg_04);
+				.getTextureRegion(R.string.bg_04);
 		mBackgroundTextureAtlas.load();
 	}
 
-	private Reaper mPlayer = (Reaper) CharacterCollection.getInstance().getCharacter("Dante");
+//	private Reaper mPlayer = (Reaper) CharacterCollection.getInstance().getCharacter("Dante");
 
 	@Override
 	public void onCreate() {
@@ -269,8 +271,8 @@ public class GameScene extends BaseScene {
 				new LoopEntityModifier(new MoveYModifier(10, -228, 0)));
 		attachChild(mBackgroundSprite);
 
-		GameScene.this.attachChild(mPlayer);
-		mPlayer.setVisible(false);
+//		GameScene.this.attachChild(mPlayer);
+//		mPlayer.setVisible(false);
 
 		this.attachChild(new Rectangle(GameConstants.X_SUBMENU_PADDING,
 				GameConstants.Y_SUBMENU_PADDING + GameConstants.FONT_SIZE,
@@ -285,7 +287,7 @@ public class GameScene extends BaseScene {
 			final int pPadding) {
 		Text optionMenu = new Text(GameConstants.X_OPTION_TEXT_PADDING,
 				GameConstants.Y_OPTION_TEXT_PADDING * pPadding,
-				ResourceManager.getInstance().getFont(FONT_ID),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 				">> " + pOption.toString(),
 				new TextOptions(HorizontalAlign.RIGHT),
 				ResourceManager.getInstance().getVertexBufferObjectManager()) {
@@ -314,7 +316,7 @@ public class GameScene extends BaseScene {
 
 		mOptionTextMap.put(OptionMenu.BACK,
 				new Text(GameConstants.X_OPTION_TEXT_PADDING, GameConstants.Y_OPTION_TEXT_PADDING * 8,
-						ResourceManager.getInstance().getFont(FONT_ID),
+						FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 						">> " + OptionMenu.BACK.toString(),
 						new TextOptions(HorizontalAlign.RIGHT),
 						ResourceManager.getInstance().getVertexBufferObjectManager()) {
@@ -346,7 +348,7 @@ public class GameScene extends BaseScene {
 	@Override
 	public void onDestroy() {
 		AudioManager.getInstance().pauseMusic();
-		mPlayer.detachSelf(); // Do not dispose GameCharacter
+//		mPlayer.detachSelf(); // Do not dispose GameCharacter
 
 		mTextMenuTitle.detachSelf();
 		mTextMenuTitle.dispose();

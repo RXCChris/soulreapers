@@ -74,32 +74,29 @@ public class ItemBase implements Comparable<ItemBase> {
 	/**
 	 * Each item has an unique ID.
 	 */
-	private final int mItemId;
+	private final int mItemID;
 	private final ItemType mItemType;
 	private final String mName;
 	private final String mDescription;
 	private int mQuantity = 1;
-	private int mAvailability;
+	private int mAvailability = 1;
 
-	protected Effect mEffect;
+	protected Effect mEffect = null;
 
-	public ItemBase(final int pItemId,
+	public ItemBase(final int pItemID,
 			final ItemType pItemType,
 			final String pName,
-			final String pDescription,
-			int pQuantity) {
-		mItemId = pItemId;
+			final String pDescription) {
+		mItemID = pItemID;
 		mItemType = pItemType;
 		mName = pName;
 		mDescription = pDescription;
-		setQuantity(pQuantity);
-		mAvailability = mQuantity;
 	}
 
-	public static final ItemBase EMPTY = new ItemBase(0, null, "EMPTY", "", 0);
+//	public static final ItemBase EMPTY = new ItemBase(0, null, "EMPTY", "", 0);
 
-	public int getItemId() {
-		return mItemId;
+	public int getItemID() {
+		return mItemID;
 	}
 
 	public int getQuantity() {
@@ -118,14 +115,14 @@ public class ItemBase implements Comparable<ItemBase> {
 		return mDescription;
 	}
 
-	private void setQuantity(int pQuantity) {
-		mQuantity = pQuantity;
-		if (mQuantity > MAX_QUANTITY) {
-			mQuantity = MAX_QUANTITY;
-		} else if (pQuantity < 0) {
-			mQuantity = 0;
-		}
-	}
+//	private void setQuantity(int pQuantity) {
+//		mQuantity = pQuantity;
+//		if (mQuantity > MAX_QUANTITY) {
+//			mQuantity = MAX_QUANTITY;
+//		} else if (pQuantity < 0) {
+//			mQuantity = 0;
+//		}
+//	}
 
 	public int getAvailability() {
 		return mAvailability;
@@ -139,24 +136,26 @@ public class ItemBase implements Comparable<ItemBase> {
 //		setQuantity(mQuantity - pAmount);
 //	}
 
-	public void setQuantity(Inventory pInventory, int pQuantity) {
+	private void setQuantity(int pQuantity) {
 		mQuantity = pQuantity;
 		if (mQuantity >= MAX_QUANTITY) {
 			mQuantity = MAX_QUANTITY;
-//			this.onFull();
+			this.onFull();
 		} else if (pQuantity <= 0) {
 			mQuantity = 0;
-			this.onDepleted(pInventory);
+			this.onDepleted();
 		}
-		setAvailability(pQuantity);
+		Debug.d(mName + " has " + mQuantity + " copies.");
 	}
 
-	public void increase(Inventory pInventory, int pAmount) {
-		setQuantity(pInventory, mQuantity + pAmount);
+	public void increaseQuantity(int pAmount) {
+		setQuantity(mQuantity + pAmount);
+		incrementAvailability(pAmount);
 	}
 
-	public void decrease(Inventory pInventory, int pAmount) {
-		setQuantity(pInventory, mQuantity - pAmount);
+	public void decreaseQuantity(int pAmount) {
+		setQuantity(mQuantity - pAmount);
+		decrementAvailability(pAmount);
 	}
 
 	public void incrementAvailability(int pAmount) {
@@ -166,21 +165,25 @@ public class ItemBase implements Comparable<ItemBase> {
 		setAvailability(mAvailability - pAmount);
 	}
 
-	public void setAvailability(int pAmount) {
-		if (pAmount > mQuantity) {
-			pAmount = mQuantity;
-		}
+	private void setAvailability(int pAmount) {
 		mAvailability = pAmount;
-//		mAvailability = (mQuantity >= pAmount) ? pAmount : mQuantity;
+		if (mAvailability > mQuantity) {
+			mAvailability = mQuantity;
+			Debug.d("Availability of an item cannot be higher than its quantity.");
+		} else if (mAvailability < 0) {
+			mAvailability = 0;
+			Debug.d("Availability of an item cannot be negative.");
+		}
 		Debug.i("setAvailability: " + mAvailability);
 	}
 
 	protected void onFull() {
-		
+		Debug.d(mName + " is full.");
 	}
 
-	protected void onDepleted(Inventory pInventory) {
-		pInventory.removeAll(this);
+	protected void onDepleted() {
+//		pInventory.removeAll(this);
+		Debug.d(mName + "is depleted, proceed to remove it from Inventory.");
 	}
 
 	/* (non-Javadoc)
@@ -188,11 +191,11 @@ public class ItemBase implements Comparable<ItemBase> {
 	 */
 	@Override
 	public int compareTo(ItemBase another) {
-		return this.getItemId() - another.getItemId();
+		return this.getItemID() - another.getItemID();
 	}
 
 	public interface IConsumable {
-		void onConsumed(BattleCharacter pUser, BattleCharacter pTarget);
+		void onConsumed(Reaper pUser, BattleCharacter pTarget);
 	}
 
 	public interface IEquipable {

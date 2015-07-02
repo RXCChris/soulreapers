@@ -10,7 +10,9 @@ import org.andengine.entity.text.TextOptions;
 import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
 
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
+import com.soulreapers.core.FontManager.FontType;
 import com.soulreapers.misc.GameConstants;
 
 /**
@@ -18,8 +20,8 @@ import com.soulreapers.misc.GameConstants;
  *
  */
 public class SubMenuLayout extends Rectangle {
-	private static final int FONT_ID = ResourceManager.FONT_SUB_TITLE_ID;
-	private static final int FONT_TEXT_ID = ResourceManager.FONT_TEXT_ID;
+//	private static final int FONT_ID = ResourceManager.FONT_SUB_TITLE_ID;
+//	private static final int FONT_TEXT_ID = ResourceManager.FONT_TEXT_ID;
 	private static final int INFO_BOX_HEIGHT = 80;
 	private static final int LINE_HEIGHT = 4;
 	private static final int LINE_PADDING_Y = 20;
@@ -44,34 +46,34 @@ public class SubMenuLayout extends Rectangle {
 					RECTANGLE_WIDTH, INFO_BOX_HEIGHT,
 					ResourceManager.getInstance().getVertexBufferObjectManager());
 
-	protected Text mTextInfo = new Text(0, RECTANGLE_HEIGHT - INFO_BOX_HEIGHT - FONT_ID / 2,
-			ResourceManager.getInstance().getFont(FONT_ID),
+	protected Text mTextInfo = new Text(0, RECTANGLE_HEIGHT - INFO_BOX_HEIGHT,
+			FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 			GameConstants.STRING.INFO,
 			ResourceManager.getInstance().getVertexBufferObjectManager());
 
 	protected Text mTextSubMenuName = new Text(PADDING_FIRST_X, 0,
-			ResourceManager.getInstance().getFont(FONT_ID),
+			FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 			"",
 			MAX_CHAR_NAME_SIZE,
 			ResourceManager.getInstance().getVertexBufferObjectManager());
 
 	protected Text mTextFirstColumn = new Text(PADDING_FIRST_X * 2, LINE_PADDING_Y,
-			ResourceManager.getInstance().getFont(FONT_ID),
+			FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 			"",
 			MAX_CHAR_NAME_SIZE,
 			ResourceManager.getInstance().getVertexBufferObjectManager());
 
 	protected Text mTextSecondColumn = new Text(PADDING_SECOND_X, LINE_PADDING_Y,
-			ResourceManager.getInstance().getFont(FONT_ID),
+			FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 			"",
 			MAX_CHAR_NAME_SIZE,
 			ResourceManager.getInstance().getVertexBufferObjectManager());
 
-	protected Text mTextInfoDescription = new Text(PADDING_FIRST_X, RECTANGLE_HEIGHT - INFO_BOX_HEIGHT + FONT_ID / 2,
-			ResourceManager.getInstance().getFont(FONT_TEXT_ID),
+	protected Text mTextInfoDescription = new Text(PADDING_FIRST_X, RECTANGLE_HEIGHT - INFO_BOX_HEIGHT ,
+			FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 			"",
 			MAX_CHAR_INFO_SIZE,
-			new TextOptions(AutoWrap.WORDS, RECTANGLE_WIDTH - FONT_ID, HorizontalAlign.LEFT),
+			new TextOptions(AutoWrap.WORDS, RECTANGLE_WIDTH , HorizontalAlign.LEFT),
 			ResourceManager.getInstance().getVertexBufferObjectManager());
 
 	public SubMenuLayout() {

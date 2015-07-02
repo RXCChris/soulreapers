@@ -10,7 +10,9 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.HorizontalAlign;
 import org.andengine.util.debug.Debug;
 
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
+import com.soulreapers.core.FontManager.FontType;
 import com.soulreapers.object.item.ItemBase;
 import com.soulreapers.ui.menu.SlotUI;
 
@@ -31,7 +33,7 @@ public class ItemSlotUI extends SlotUI {
 		super(pIndex, pItem.getName());
 
 		mTextQuantity = new Text(QUANTITY_PADDING_X, 0,
-				ResourceManager.getInstance().getFont(FONT_TEXT_ID),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 				String.format("%02d", pItem.getQuantity()),
 				new TextOptions(HorizontalAlign.RIGHT),
 				ResourceManager.getInstance().getVertexBufferObjectManager());

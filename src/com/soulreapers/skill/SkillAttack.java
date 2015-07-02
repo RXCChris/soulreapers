@@ -23,7 +23,7 @@ package com.soulreapers.skill;
 import org.andengine.util.debug.Debug;
 
 import com.soulreapers.misc.Stat;
-import com.soulreapers.misc.Attributes.AttributeType;
+import com.soulreapers.misc.CharacterParameters.AttributeType;
 import com.soulreapers.object.character.BattleCharacter;
 import com.soulreapers.object.character.GameCharacter.CharacterType;
 import com.soulreapers.object.item.Effect.ValueType;
@@ -35,6 +35,11 @@ import com.soulreapers.util.Util;
  *
  */
 public class SkillAttack extends Skill {
+	public enum SkillAttackType {
+		SLASHING,
+		PIERCING,
+		BLUDGEONING
+	}
 //	private int mBaseDamage;
 //	private int mCost;
 

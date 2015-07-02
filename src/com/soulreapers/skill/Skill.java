@@ -34,7 +34,7 @@ public abstract class Skill extends ItemBase implements ISkill, IEquipable {
 	private final int mCost;
 
 	public Skill(int pSkillId, final String pName, final String pDescription, int pCost) {
-		super(pSkillId, ItemType.SKILL, pName, pDescription, 1);
+		super(pSkillId, ItemType.SKILL, pName, pDescription);
 		mCost = pCost;
 //		mName = pName;
 //		mDescription = pDescription;

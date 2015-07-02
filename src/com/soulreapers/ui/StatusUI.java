@@ -30,9 +30,11 @@ import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
 import com.soulreapers.R;
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
+import com.soulreapers.core.FontManager.FontType;
 import com.soulreapers.misc.Stat;
-import com.soulreapers.misc.Attributes.AttributeType;
+import com.soulreapers.misc.CharacterParameters.AttributeType;
 import com.soulreapers.object.Gauge;
 import com.soulreapers.object.character.BattleCharacter;
 
@@ -40,9 +42,10 @@ import com.soulreapers.object.character.BattleCharacter;
  * @author dxcloud
  *
  */
+@Deprecated
 public class StatusUI extends Entity {
 //	private static final int STATUS_FONT = R.string.ft_text;
-	private static final int FONT_ID = ResourceManager.FONT_STATS_ID;
+//	private static final int FONT_ID = ResourceManager.FONT_STATS_ID;
 	private Text mNameText;
 	private Text mLevelText;
 	private Rectangle mRectangle;
@@ -70,18 +73,18 @@ public class StatusUI extends Entity {
 		mRectangle.setColor(0.2f, 0.2f, 0.2f, 0.6f);
 
 		mNameText = new Text(X_STATUS_INFO, Y_STATUS_INFO,
-				ResourceManager.getInstance().getFont(FONT_ID),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 				pCharacter.getName(),
 				ResourceManager.getInstance().getVertexBufferObjectManager());
 		mLevelText = new Text(X_STATUS_INFO + X_PADDING, Y_STATUS_INFO,
-				ResourceManager.getInstance().getFont(FONT_ID),
-				String.format("Lv. " + STATUS_VALUE_FORMAT, pCharacter.getAttributes().getLevel()),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
+				String.format("Lv. " + STATUS_VALUE_FORMAT, pCharacter.getParameters().getLevel()),
 				ResourceManager.getInstance().getVertexBufferObjectManager());
 
 		int i = 1;
 		for (AttributeType feature : AttributeType.values()) {
 			createStatusText(X_STATUS_INFO, Y_STATUS_INFO + Y_PADDING * (i++),
-					feature, pCharacter.getAttributes().getCurrent(feature));
+					feature, pCharacter.getParameters().getCurrent(feature));
 		}
 
 		mHealthGauge = new Gauge(X_STATUS_INFO, Y_STATUS_INFO + Y_PADDING + GAUGE_PADDING_X,
@@ -102,13 +105,13 @@ public class StatusUI extends Entity {
 
 	private void createStatusText(int pX, int pY, AttributeType pFeature, int pValue) {
 		Text statusName = new Text(pX, pY,
-				ResourceManager.getInstance().getFont(FONT_ID),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 				pFeature.toString(),
 				pFeature.toString().length(),
 				new TextOptions(HorizontalAlign.LEFT),
 				ResourceManager.getInstance().getVertexBufferObjectManager());
 		Text statusValue = new Text(pX + X_PADDING, pY,
-				ResourceManager.getInstance().getFont(FONT_ID),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 				String.format(STATUS_VALUE_FORMAT, pValue),
 				MAX_CHAR_STATUS_VALUE,
 				new TextOptions(HorizontalAlign.RIGHT),
@@ -132,11 +135,11 @@ public class StatusUI extends Entity {
 
 	public void updateAllStatus(BattleCharacter pCharacter) {
 		for (AttributeType feature : AttributeType.values()) {
-			updateStatus(feature, pCharacter.getAttributes().getCurrent(feature));
+			updateStatus(feature, pCharacter.getParameters().getCurrent(feature));
 		}
-		mLevelText.setText(String.format("Lv. " + STATUS_VALUE_FORMAT, pCharacter.getAttributes().getLevel()));
-		updateGauge(Stat.HEALTH, pCharacter.getAttributes().getCurrent(AttributeType.SOUL), pCharacter.getAttributes().getCurrent(AttributeType.SOUL));
-		updateGauge(Stat.EXP, pCharacter.getAttributes().getCurrent(AttributeType.EXPERIENCE), pCharacter.getAttributes().getCurrent(AttributeType.EXPERIENCE));
+		mLevelText.setText(String.format("Lv. " + STATUS_VALUE_FORMAT, pCharacter.getParameters().getLevel()));
+		updateGauge(Stat.HEALTH, pCharacter.getParameters().getCurrent(AttributeType.SOUL), pCharacter.getParameters().getCurrent(AttributeType.SOUL));
+		updateGauge(Stat.EXP, pCharacter.getParameters().getCurrent(AttributeType.EXPERIENCE), pCharacter.getParameters().getCurrent(AttributeType.EXPERIENCE));
 	}
 
 	@Override

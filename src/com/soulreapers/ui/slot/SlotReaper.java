@@ -8,8 +8,10 @@ import org.andengine.entity.text.TextOptions;
 import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
 
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
-import com.soulreapers.misc.Attributes.AttributeType;
+import com.soulreapers.core.FontManager.FontType;
+import com.soulreapers.misc.CharacterParameters.AttributeType;
 import com.soulreapers.object.Gauge;
 import com.soulreapers.object.character.reaper.Reaper;
 
@@ -17,6 +19,7 @@ import com.soulreapers.object.character.reaper.Reaper;
  * @author chris
  *
  */
+@Deprecated
 public class SlotReaper extends Slot<Reaper> {
 	private static final float RECTANGLE_X = 420;
 	private static final float RECTANGLE_Y = 80;
@@ -36,17 +39,17 @@ public class SlotReaper extends Slot<Reaper> {
 	private static final float GAUGE_HEIGHT = 10;
 
 //	private static final int FONT_ID = ResourceManager.FONT_TEXT_ID;
-	private static final int FONT_STATS_ID = ResourceManager.FONT_STATS_ID;
+//	private static final int FONT_STATS_ID = ResourceManager.FONT_STATS_ID;
 
 	private Text mTextName;
 	private Text mTextLevel;
 
 	private final Text mTextSoul = new Text(OFFSET_X, OFFSET_Y + PADDING_Y,
-			ResourceManager.getInstance().getFont(FONT_STATS_ID),
+			FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 			AttributeType.SOUL.toString(),
 			ResourceManager.getInstance().getVertexBufferObjectManager());
 	private final Text mTextExp = new Text(OFFSET_X, OFFSET_Y + PADDING_Y * 2,
-			ResourceManager.getInstance().getFont(FONT_STATS_ID),
+			FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 			AttributeType.EXPERIENCE.toString(),
 			ResourceManager.getInstance().getVertexBufferObjectManager());
 
@@ -65,24 +68,24 @@ public class SlotReaper extends Slot<Reaper> {
 		mPaddingY = RECTANGLE_PADDING_Y;
 
 		mTextName = new Text(OFFSET_X, OFFSET_Y,
-				ResourceManager.getInstance().getFont(FONT_TEXT_ID),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
 				pReaper.getName(),
 				ResourceManager.getInstance().getVertexBufferObjectManager());
 		mTextLevel = new Text(OFFSET_X + PADDING_X, OFFSET_Y,
-				ResourceManager.getInstance().getFont(FONT_TEXT_ID),
-				"Lv.\t" + pReaper.getAttributes().getLevel(),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
+				"Lv.\t" + pReaper.getParameters().getLevel(),
 				new TextOptions(HorizontalAlign.RIGHT),
 				ResourceManager.getInstance().getVertexBufferObjectManager());
 		mTextSoulValue = new Text(OFFSET_X + PADDING_X, OFFSET_Y + PADDING_Y,
-				ResourceManager.getInstance().getFont(FONT_STATS_ID),
-				"" + pReaper.getAttributes().getTotal(AttributeType.SOUL),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
+				"" + pReaper.getParameters().getTotal(AttributeType.SOUL),
 				ResourceManager.getInstance().getVertexBufferObjectManager());
 		mTextExpValue = new Text(OFFSET_X + PADDING_X, OFFSET_Y + PADDING_Y * 2,
-				ResourceManager.getInstance().getFont(FONT_STATS_ID),
-				"" + pReaper.getAttributes().getTotal(AttributeType.EXPERIENCE),
+				FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL),
+				"" + pReaper.getParameters().getTotal(AttributeType.EXPERIENCE),
 				ResourceManager.getInstance().getVertexBufferObjectManager());
-		mGaugeExp.update(pReaper.getAttributes().getCurrent(AttributeType.EXPERIENCE),
-				pReaper.getAttributes().getTotal(AttributeType.EXPERIENCE));
+		mGaugeExp.update(pReaper.getParameters().getCurrent(AttributeType.EXPERIENCE),
+				pReaper.getParameters().getTotal(AttributeType.EXPERIENCE));
 
 		mTextLevel.setX(mTextLevel.getX() - mTextLevel.getWidth());
 		mTextSoulValue.setX(mTextSoulValue.getX() - mTextSoulValue.getWidth());
@@ -113,8 +116,8 @@ public class SlotReaper extends Slot<Reaper> {
 	@Override
 	public void updateContent() {
 		mTextName.setText(mElement.getName());
-		mTextLevel.setText(String.format("Lv.\t %d", mElement.getAttributes().getLevel()));
-		mTextSoulValue.setText(String.format("%d", mElement.getAttributes().getTotal(AttributeType.SOUL)));
-		mTextExpValue.setText(String.format("%d", mElement.getAttributes().getTotal(AttributeType.EXPERIENCE)));
+		mTextLevel.setText(String.format("Lv.\t %d", mElement.getParameters().getLevel()));
+		mTextSoulValue.setText(String.format("%d", mElement.getParameters().getTotal(AttributeType.SOUL)));
+		mTextExpValue.setText(String.format("%d", mElement.getParameters().getTotal(AttributeType.EXPERIENCE)));
 	}
 }

@@ -11,7 +11,7 @@ import com.soulreapers.core.SceneManager;
 import com.soulreapers.misc.GameConstants;
 import com.soulreapers.scene.ConfirmDialog;
 import com.soulreapers.scene.GameMenuScene;
-import com.soulreapers.scene.MainMenuScene;
+import com.soulreapers.scene.SceneTitle;
 import com.soulreapers.util.SRButton;
 
 /**
@@ -56,7 +56,7 @@ public class MenuDataUI extends MenuUI {
 						new ConfirmDialog(GameConstants.STRING.CONFIRM_RETURN_TO_TITLE) {
 					@Override
 					protected void onPositive() {
-						SceneManager.getInstance().showScene(MainMenuScene.class);
+						SceneManager.getInstance().showScene(SceneTitle.class);
 						super.onPositive();
 					}
 					@Override

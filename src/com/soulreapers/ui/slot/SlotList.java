@@ -16,6 +16,7 @@ import com.soulreapers.ui.menu.SubMenuLayout;
  * @author chris
  *
  */
+@Deprecated
 public abstract class SlotList<T, S extends Slot<T>> extends Entity {
 	protected SubMenuLayout mSubMenuLayout;
 	protected ArrayList<S> mList = new ArrayList<S>();

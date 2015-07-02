@@ -21,10 +21,9 @@ package com.soulreapers.object.character.reaper;
 
 import org.andengine.util.debug.Debug;
 
-import com.soulreapers.misc.Attributes.AttributeType;
+import com.soulreapers.misc.CharacterParameters.AttributeType;
 import com.soulreapers.object.character.BattleCharacter;
 import com.soulreapers.skill.SkillAttack;
-import com.soulreapers.skill.SkillCollection;
 import com.soulreapers.skill.SkillGesture;
 
 /**
@@ -37,26 +36,26 @@ public class Reaper extends BattleCharacter {
 
 //	private ArrayList<CombatItem> mCombatItemList = new ArrayList<CombatItem>();
 
-	private Equipment mEquipment;
-	private SkillSet mSkillSet;
+	private Equipment mEquipment = new Equipment();
+	private SkillSet mSkillSet = new SkillSet();
 
 //	private Skill mSkill;
 
-	public Reaper(String pName, int pIllustrationId, int pIconId) {
-		super(pName, pIllustrationId, pIconId, CharacterType.REAPER);
+	public Reaper(final int pID, final String pName, final int pIllustrationID, final int pIconID) {
+		super(pID, CharacterType.REAPER, pName, pIllustrationID, pIconID);
 //		mSkill = new OffensiveSkill("Combo horizontal", "Effectue une attaque horizontal", 20, 1);
-		mSkillMap.put(SkillGesture.SINGLE_TAP, SkillCollection.getInstance().getOffensiveSkill(SkillCollection.O.SLAP_SHOT));
+//		mSkillMap.put(SkillGesture.SINGLE_TAP, SkillCollection.getInstance().getOffensiveSkill(SkillCollection.O.SLAP_SHOT));
 //		mSkillMap.put(SkillGesture.DOUBLE_TAP, SkillCollection.getInstance().getSkill(SkillCollection.O.DOUBLE_SLASH));
-		mSkillMap.put(SkillGesture.SWIPE_UP, SkillCollection.getInstance().getOffensiveSkill(SkillCollection.O.UPPER_SLASH));
-		mSkillMap.put(SkillGesture.SWIPE_DOWN, SkillCollection.getInstance().getOffensiveSkill(SkillCollection.O.AERIAL_DIVE));
-		mSkillMap.put(SkillGesture.SWIPE_LEFT, SkillCollection.getInstance().getOffensiveSkill(SkillCollection.O.AERIAL_SWEEP));
+//		mSkillMap.put(SkillGesture.SWIPE_UP, SkillCollection.getInstance().getOffensiveSkill(SkillCollection.O.UPPER_SLASH));
+//		mSkillMap.put(SkillGesture.SWIPE_DOWN, SkillCollection.getInstance().getOffensiveSkill(SkillCollection.O.AERIAL_DIVE));
+//		mSkillMap.put(SkillGesture.SWIPE_LEFT, SkillCollection.getInstance().getOffensiveSkill(SkillCollection.O.AERIAL_SWEEP));
 //		super.updateSkill();
 
 //		for (int i = 0; i < GameConstants.REAPER.COMBAT_ITEM_CAPACITY; ++i) {
 //			mCombatItemList.add(CombatItem.EMPTY);
 //		}
-		mEquipment = new Equipment(this);
-		mSkillSet = new SkillSet(this);
+//		mEquipment = new Equipment();
+//		mSkillSet = new SkillSet();
 	}
 
 	public Equipment getEquipment() {
@@ -94,21 +93,21 @@ public class Reaper extends BattleCharacter {
 //	public ArrayList<CombatItem> getEquippedItemList() {
 //		return mCombatItemList;
 //	}
- 
-	public boolean executeOffensiveSkill(SkillGesture pGesture,
-			BattleCharacter pUser, BattleCharacter pTarget) {
-		Debug.d("Reaper trying to use skill");
-		if (mSkillMap.containsKey(pGesture)) {
-			SkillAttack skill = mSkillMap.get(pGesture);
 
-			Debug.d("Reaper needs " + skill.getCost() + "/" + mAttributes.getCurrent(AttributeType.JUSTICE));
-			if (mAttributes.isCurrentGreaterThan(AttributeType.JUSTICE, skill.getCost())) {
-				Debug.d("Reapers has enough justice");
-				skill.onSkillStarted(pUser, pTarget);
-				mAttributes.decreaseCurrent(AttributeType.JUSTICE, skill.getCost());
-				return true;
-			}
-		}
-		return false;
-	}
+//	public boolean executeOffensiveSkill(SkillGesture pGesture,
+//			BattleCharacter pUser, BattleCharacter pTarget) {
+//		Debug.d("Reaper trying to use skill");
+//		if (mSkillMap.containsKey(pGesture)) {
+//			SkillAttack skill = mSkillMap.get(pGesture);
+//
+//			Debug.d("Reaper needs " + skill.getCost() + "/" + mAttributes.getCurrent(AttributeType.JUSTICE));
+//			if (mAttributes.isCurrentGreaterThan(AttributeType.JUSTICE, skill.getCost())) {
+//				Debug.d("Reapers has enough justice");
+//				skill.onSkillStarted(pUser, pTarget);
+//				mAttributes.decreaseCurrent(AttributeType.JUSTICE, skill.getCost());
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 }

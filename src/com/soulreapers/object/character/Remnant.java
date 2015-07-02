@@ -19,36 +19,48 @@
  */
 package com.soulreapers.object.character;
 
-import com.soulreapers.misc.Attributes.AttributeType;
+import com.soulreapers.misc.CharacterParameters.AttributeType;
 import com.soulreapers.misc.OverkillListener;
 
 /**
  * @author chris
  *
  */
-public class Remnant extends BattleCharacter implements Cloneable {
-
-	private OverkillListener mOverkillListener;
-	public void setOverkillListener(final OverkillListener pOverkillListener) {
-		mOverkillListener = pOverkillListener;
+public class Remnant extends BattleCharacter {
+	public enum RemnantType {
+		BEAST,
+		INSECT,
+		DRAGON,
+		HUMANOID,
+		MACHINE,
+		DEAMON,
+		PLANT,
+		DEITY
 	}
+	private final RemnantType mRemnantType;
+
 	/**
 	 * @param pName
 	 * @param pResId
 	 */
-	public Remnant(String pName, int pIllustrationId, int pIconId) {
-		super(pName, pIllustrationId, pIconId, CharacterType.REMNANT);
+	public Remnant(final int pID,
+			final String pName,
+			final int pIllustrationID,
+			final int pIconID,
+			final RemnantType pRemnantType) {
+		super(pID, CharacterType.REMNANT, pName, pIllustrationID, pIconID);
 
-		// TODO
-		// Test, to be removed
-		mAttributes.setBase(100, 23, 56, 1, 6, 0);
-		mAttributes.resetCurrent();
+		mRemnantType = pRemnantType;
 	}
 
-	@Override
-	public Remnant clone() throws CloneNotSupportedException {
-		return (Remnant) super.clone();
+	public RemnantType getRemnantType() {
+		return mRemnantType;
 	}
+
+//	@Override
+//	public Remnant clone() throws CloneNotSupportedException {
+//		return (Remnant) super.clone();
+//	}
 
 //	@Override
 //	public BattleCharacter instanciate() {
@@ -68,9 +80,9 @@ public class Remnant extends BattleCharacter implements Cloneable {
 	 */
 	@Override
 	public void onDie() {
-		if (mOverkillListener != null) {
-			mOverkillListener.onOverkillStarted();
-		}
+//		if (mOverkillListener != null) {
+//			mOverkillListener.onOverkillStarted();
+//		}
 	}
 	
 

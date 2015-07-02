@@ -16,8 +16,9 @@ import com.soulreapers.misc.GameConstants;
  * @author chris
  *
  */
+@Deprecated
 public abstract class Slot<T> extends Rectangle {
-	protected static final int FONT_TEXT_ID = ResourceManager.FONT_TEXT_ID;
+//	protected static final int FONT_TEXT_ID = ResourceManager.FONT_TEXT_ID;
 
 //	protected static final float RECTANGLE_WIDTH = 380;
 //	protected static final float RECTANGLE_HEIGHT = 36;

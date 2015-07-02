@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
         <string name="app_name">Soul Reapers</string>
-        <string name="menu_main">Menu Principal</string>
-        <string name="menu_inventory">Inventaire</string>
-        <string name="menu_equip">Equipement</string>
+        <string name="main_menu">Menu Principal</string>
+        <string name="inventory">Inventaire</string>
+        
+        <string name="combat">Combat</string><string name="weapon">Arme</string>
+        <string name="accessory">Accessoire</string>
+        <string name="loot">Butin</string>
+        <string name="key">Objet clé</string><string name="equip">Equipement</string>
+        
+        <string name="empty">-- Vide --</string>
+        <string name="remove">-- Enlever --</string>
+        <string name="status">Status</string>
+        <string name="courage">Courage</string>
+        <string name="prudence">Prudence</string>
+        <string name="temperance">Tempérance</string>
+        <string name="justice">Justice</string>
+        <string name="soul">Soul</string>
+        <string name="exp">Experience</string>
+        <string name="next">Suivant</string>
 </resources>

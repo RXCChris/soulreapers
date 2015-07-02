@@ -27,7 +27,9 @@ import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.text.Text;
 import org.andengine.util.debug.Debug;
 
+import com.soulreapers.core.FontManager;
 import com.soulreapers.core.ResourceManager;
+import com.soulreapers.core.FontManager.FontType;
 import com.soulreapers.object.character.BattleCharacter;
 import com.soulreapers.skill.Skill;
 import com.soulreapers.skill.SkillGesture;
@@ -36,6 +38,7 @@ import com.soulreapers.skill.SkillGesture;
  * @author chris
  *
  */
+@Deprecated
 public class SkillUI extends Entity {
 //	private static final int SKILL_FONT = R.string.ft_text;
 	private static final int RECTANGLE_X = 16;
@@ -43,7 +46,7 @@ public class SkillUI extends Entity {
 	private static final int RECTANGLE_WIDTH = 294;
 	private static final int RECTANGLE_HEIGHT = 118;
 
-	private static final int FONT_ID = ResourceManager.FONT_STATS_ID;
+//	private static final int FONT_ID = ResourceManager.FONT_STATS_ID;
 	private static final String STRING_EMPTY = "---";
 	private static final int PADDING_Y = 20;
 	private static final int OFFSET_X = RECTANGLE_X + 10;
@@ -72,10 +75,10 @@ public class SkillUI extends Entity {
 
 	public SkillUI(final BattleCharacter pPlayableCharacter) {
 		mBackground.setColor(0.2f, 0.2f, 0.2f, 0.6f);
-		int i = 0;
-		for (SkillGesture gesture : SkillGesture.values()) {
-			insertSkillText(OFFSET_X, OFFSET_Y + PADDING_Y * (i++), gesture, pPlayableCharacter.getOffensiveSkill(gesture));
-		}
+//		int i = 0;
+//		for (SkillGesture gesture : SkillGesture.values()) {
+//			insertSkillText(OFFSET_X, OFFSET_Y + PADDING_Y * (i++), gesture, pPlayableCharacter.getOffensiveSkill(gesture));
+//		}
 	}
 
 	private void insertSkillText(int pX, int pY, SkillGesture pGesture, Skill pSkill) {
@@ -88,9 +91,9 @@ public class SkillUI extends Entity {
 			Debug.i("Can t find skill associated with " + pGesture.toString());
 		}
 
-		Text gesture = new Text(pX, pY, ResourceManager.getInstance().getFont(FONT_ID), pGesture.toString(), ResourceManager.getInstance().getVertexBufferObjectManager());
-		Text name = new Text(pX + PADDING_NAME, pY, ResourceManager.getInstance().getFont(FONT_ID), skillName, 24, ResourceManager.getInstance().getVertexBufferObjectManager());
-		Text cost = new Text(pX + PADDING_COST, pY, ResourceManager.getInstance().getFont(FONT_ID), String.format("%2d", skillCost), ResourceManager.getInstance().getVertexBufferObjectManager());
+		Text gesture = new Text(pX, pY, FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL), pGesture.toString(), ResourceManager.getInstance().getVertexBufferObjectManager());
+		Text name = new Text(pX + PADDING_NAME, pY, FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL), skillName, 24, ResourceManager.getInstance().getVertexBufferObjectManager());
+		Text cost = new Text(pX + PADDING_COST, pY, FontManager.getInstance().getFont(FontType.FONT_OPTION_SMALL), String.format("%2d", skillCost), ResourceManager.getInstance().getVertexBufferObjectManager());
 		mSkillTextMap.put(pGesture, new SkillText(gesture, name, cost));
 
 	}
@@ -140,14 +143,14 @@ public class SkillUI extends Entity {
 
 	public void update(BattleCharacter pPlayableCharacter) {
 		for (Entry<SkillGesture, SkillText> entry : mSkillTextMap.entrySet()) {
-			Skill skill = pPlayableCharacter.getOffensiveSkill(entry.getKey());
-			if (skill != null) {
-				entry.getValue().mName.setText(skill.getName());
-				entry.getValue().mCost.setText(String.format("%2d", skill.getCost()));
-			} else {
-				entry.getValue().mName.setText(STRING_EMPTY);
-				entry.getValue().mCost.setText(String.format("%2d", 0));
-			}
+//			Skill skill = pPlayableCharacter.getOffensiveSkill(entry.getKey());
+//			if (skill != null) {
+//				entry.getValue().mName.setText(skill.getName());
+//				entry.getValue().mCost.setText(String.format("%2d", skill.getCost()));
+//			} else {
+//				entry.getValue().mName.setText(STRING_EMPTY);
+//				entry.getValue().mCost.setText(String.format("%2d", 0));
+//			}
 		}
 	}
 }
